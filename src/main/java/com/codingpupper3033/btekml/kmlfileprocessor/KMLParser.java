@@ -1,7 +1,7 @@
 package com.codingpupper3033.btekml.kmlfileprocessor;
 
-import com.codingpupper3033.btekml.maphelpers.altitude.AltitudeMode;
 import com.codingpupper3033.btekml.maphelpers.Coordinate;
+import com.codingpupper3033.btekml.maphelpers.altitude.AltitudeMode;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -46,7 +46,7 @@ public class KMLParser {
         for (int i = 0; i < KML_FILE_NAMES.length; i++) {
             if (f.getName().endsWith("." + KML_FILE_NAMES[i])) {
                 Document[] out = new Document[1];
-                out[1] = parseKML(f);
+                out[0] = parseKML(f);
                 return out;
             }
         }
