@@ -13,7 +13,7 @@ import net.minecraft.util.ResourceLocation;
  */
 public class IconButton extends GuiButton {
     private static final ResourceLocation buttonTextureLocation = new ResourceLocation(CodeBTEKMLMod.MODID,"textures/gui/connect_screen.png");
-    private ICON type;
+    private final ICON type;
 
     /// Types of icons able to be on the button
     public enum ICON {
@@ -21,9 +21,9 @@ public class IconButton extends GuiButton {
         HELP(16,0,16,16);
 
         private final int x;
-        private int y;
-        private int w;
-        private int h;
+        private final int y;
+        private final int w;
+        private final int h;
 
 
         ICON(int x, int y, int w, int h) {
@@ -35,6 +35,21 @@ public class IconButton extends GuiButton {
     }
 
     /**
+     * Instantiates a new Icon button.
+     *
+     * @param type     icon on the button
+     * @param buttonId the button id
+     * @param x        the x Position
+     * @param y        the y Position
+     * @param widthIn  the width of the button
+     * @param heightIn the height of the button
+     */
+    public IconButton(ICON type, int buttonId, int x, int y, int widthIn, int heightIn) {
+        super(buttonId, x, y, widthIn, heightIn, "");
+        this.type = type;
+    }
+
+    /**
      * New IconButton
      * @param type icon on the button
      * @param buttonId id
@@ -42,10 +57,8 @@ public class IconButton extends GuiButton {
      * @param y y position
      */
     public IconButton(ICON type, int buttonId, int x, int y) {
-        super(buttonId, x, y, 20, 20, "");
-        this.type = type;
+        this(type, buttonId, x, y, 20, 20);
     }
-
     @Override
     public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
         super.drawButton(mc, mouseX, mouseY, partialTicks);
@@ -53,9 +66,22 @@ public class IconButton extends GuiButton {
         if (visible) {
             GlStateManager.pushMatrix();
             {
+                //Scale
+                int scale = Math.min(width/type.w, height/type.h);
+                int iconWidth = type.w*scale;
+                int iconHeight = type.h*scale;
+
+                // Icon position
+                int iconRelativeX = (width-iconWidth)/2;
+                int iconRelativeY = (height-iconHeight)/2;
+
+                // Go to Icon Position
+                GlStateManager.translate(x+iconRelativeX, y+iconRelativeY, 0);
+
                 mc.renderEngine.bindTexture(buttonTextureLocation);
                 GlStateManager.color(1,1,1,1);
-                drawTexturedModalRect(x+2, y+2,type.x,type.y, type.w, type.h);
+                GlStateManager.scale(scale,scale,1);
+                drawTexturedModalRect(0, 0,type.x,type.y, type.w, type.h);
             }
             GlStateManager.popMatrix();
         }

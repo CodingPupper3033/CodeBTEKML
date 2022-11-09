@@ -40,7 +40,7 @@ public class KMLParser {
     public static final String LINESTRING_NODE_NAME = "LineString";
     public static final String POINT_NODE_NAME = "Point";
 
-    private static DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+    private static final DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 
 
     /**

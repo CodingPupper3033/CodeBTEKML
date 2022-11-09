@@ -29,7 +29,7 @@ import java.util.Map;
  */
 public class GuiDrawKML extends GuiScreen {
     // Parent
-    private GuiScreen parentScreen;
+    private final GuiScreen parentScreen;
 
     // File Name Text Box
     public static final int FILE_NAME_TEXT_BOX_ID = 1;

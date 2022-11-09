@@ -90,7 +90,7 @@ public class OpenElevationGoundLevelProcessor extends GoundLevelProcessor {
 
     /**
      * Processes the ground level for all Coordinates in the queue
-     * @return
+     * @return whether it was able to process the queue
      */
     @Override
     public boolean processCoordinateGroundLevelQueue() {
