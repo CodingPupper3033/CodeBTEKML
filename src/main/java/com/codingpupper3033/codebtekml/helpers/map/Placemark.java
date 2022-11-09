@@ -16,7 +16,11 @@ public abstract class Placemark {
 
     }
 
-    //public abstract Coordinate[] getCoordinates();
+    /**
+     * Gets all coordinates that this placemark uses, so we can pre-process them
+     * @return all the Coordinates in this placemark
+     */
+    public abstract Coordinate[] getCoordinates();
 
     /**
      * Should draw the placemark into the game

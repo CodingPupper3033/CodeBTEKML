@@ -28,7 +28,7 @@ public class AltitudeProcessor {
     /**
      * List of coordinates to process
      */
-    public Queue<Coordinate> coordinateProcessorQueue = new LinkedList<>();
+    private Queue<Coordinate> coordinateProcessorQueue = new LinkedList<>();
 
     /**
      * Default altitude method. Should not be used.

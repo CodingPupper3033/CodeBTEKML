@@ -20,6 +20,11 @@ public class Point extends Placemark {
     }
 
     @Override
+    public Coordinate[] getCoordinates() {
+        return new Coordinate[]{coordinate};
+    }
+
+    @Override
     public void draw(String blockName) {
         MinecraftCommands.set(coordinate, blockName); // Use World Edit set command as a point will just be a block
     }

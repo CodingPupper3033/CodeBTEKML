@@ -96,19 +96,15 @@ public class OpenElevationAltitudeProcessor extends AltitudeProcessor {
     public boolean processCoordinateQueue() {
         super.processCoordinateQueue();
 
-        for (int i = 0; i <17; i++) {
-            coordinateProcessorQueue.add(new Coordinate(42.7264177662084, -73.67230722692297,0,AltitudeMode.RELATIVE_TO_GROUND));
-        }
-
-        while (!coordinateProcessorQueue.isEmpty()) { // Keep working until all out
-            Coordinate[] setOfLocationsToProcess = new Coordinate[Math.min(MAX_COORDINATES_PER_REQUEST,coordinateProcessorQueue.size())]; // Make it only as big as needed
+        while (!getCoordinateProcessorQueue().isEmpty()) { // Keep working until all out
+            Coordinate[] setOfLocationsToProcess = new Coordinate[Math.min(MAX_COORDINATES_PER_REQUEST,getCoordinateProcessorQueue().size())]; // Make it only as big as needed
             int i = 0;
-            while (!coordinateProcessorQueue.isEmpty() && i < setOfLocationsToProcess.length) { // Only do the max size at a time
-                setOfLocationsToProcess[i] = coordinateProcessorQueue.poll();
+            while (!getCoordinateProcessorQueue().isEmpty() && i < setOfLocationsToProcess.length) { // Only do the max size at a time
+                setOfLocationsToProcess[i] = getCoordinateProcessorQueue().poll();
                 i++;
             }
 
-            // Process them
+            // Process this set
             try {
                 double[] groundLevels = getGroundLevels(setOfLocationsToProcess);
 

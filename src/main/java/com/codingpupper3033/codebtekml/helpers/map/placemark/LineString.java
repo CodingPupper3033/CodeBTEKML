@@ -22,6 +22,11 @@ public class LineString extends Placemark {
     }
 
     @Override
+    public Coordinate[] getCoordinates() {
+        return coordinates;
+    }
+
+    @Override
     public void draw(String blockName) {
         for (int i = 1; i < coordinates.length; i++) {
             MinecraftCommands.line(coordinates[i-1],coordinates[i], blockName); // Use the World Edit line command
