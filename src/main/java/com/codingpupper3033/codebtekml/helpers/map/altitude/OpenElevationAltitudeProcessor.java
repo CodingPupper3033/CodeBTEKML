@@ -24,14 +24,17 @@ public class OpenElevationAltitudeProcessor extends AltitudeProcessor {
     public static final String RESULTS_KEY = "results"; // JSON Key to get the results
     public static final String ELEVATION_KEY = "elevation"; // JSON Key to get the elevation
 
+    // Max amount of locations to ask for per request
+    public static final int MAX_COORDINATES_PER_REQUEST = 16;
+
     /**
      * @param coordinate Coordinate to get the altitude of
      * @return elevation of the ground at the coordinate
      * @throws IOException
      */
     @Override
-    public double getAltitude(Coordinate coordinate) throws IOException {
-        return getAltitudes(new Coordinate[]{coordinate})[0];
+    public double getGroundLevel(Coordinate coordinate) throws IOException {
+        return getGroundLevels(new Coordinate[]{coordinate})[0];
     }
 
     /**
@@ -40,7 +43,7 @@ public class OpenElevationAltitudeProcessor extends AltitudeProcessor {
      * @throws IOException
      */
     @Override
-    public double[] getAltitudes(Coordinate[] coordinates) throws IOException {
+    public double[] getGroundLevels(Coordinate[] coordinates) throws IOException {
         StringBuffer coordsBuffer = new StringBuffer(); // Buffer of the coordinates to request from the API
 
         for (int i = 0; i < coordinates.length; i++) { // Add all coordinates
@@ -82,5 +85,42 @@ public class OpenElevationAltitudeProcessor extends AltitudeProcessor {
         }
 
         return out;
+    }
+
+
+    /**
+     * Processes the ground level for all Coordinates in the queue
+     * @return
+     */
+    @Override
+    public boolean processCoordinateQueue() {
+        super.processCoordinateQueue();
+
+        for (int i = 0; i <17; i++) {
+            coordinateProcessorQueue.add(new Coordinate(42.7264177662084, -73.67230722692297,0,AltitudeMode.RELATIVE_TO_GROUND));
+        }
+
+        while (!coordinateProcessorQueue.isEmpty()) { // Keep working until all out
+            Coordinate[] setOfLocationsToProcess = new Coordinate[Math.min(MAX_COORDINATES_PER_REQUEST,coordinateProcessorQueue.size())]; // Make it only as big as needed
+            int i = 0;
+            while (!coordinateProcessorQueue.isEmpty() && i < setOfLocationsToProcess.length) { // Only do the max size at a time
+                setOfLocationsToProcess[i] = coordinateProcessorQueue.poll();
+                i++;
+            }
+
+            // Process them
+            try {
+                double[] groundLevels = getGroundLevels(setOfLocationsToProcess);
+
+                for (int j = 0; j < setOfLocationsToProcess.length; j++) { // Add the result to the coordinate
+                    setOfLocationsToProcess[j].setGroundLevel(groundLevels[j]);
+                }
+                return true;
+            } catch (IOException e) {
+                return false;
+            }
+        }
+
+        return false;
     }
 }

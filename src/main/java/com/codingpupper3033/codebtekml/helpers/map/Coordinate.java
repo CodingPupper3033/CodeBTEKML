@@ -19,23 +19,6 @@ public class Coordinate {
     
     private final AltitudeMode altitudeMode;
 
-    public double getLongitude() {
-        return lon;
-    }
-
-    public double getLatitude() {
-        return lat;
-    }
-
-    public double getElevation() {
-        return elv;
-    }
-
-    public AltitudeMode getAltitudeMode() {
-        return altitudeMode;
-    }
-
-
     /**
      * Instantiates a new Coordinate.
      *
@@ -52,12 +35,33 @@ public class Coordinate {
         this.altitudeMode = altitudeMode;
     }
 
+    public double getLongitude() {
+        return lon;
+    }
+
+    public double getLatitude() {
+        return lat;
+    }
+
+    public double getElevation() {
+        return elv;
+    }
+
+    public AltitudeMode getAltitudeMode() {
+        return altitudeMode;
+    }
+
+    public void setGroundLevel(Double groundLevel) {
+        this.groundLevel = groundLevel;
+    }
+
     @Override
     public String toString() {
         return "[" + lat +
                 ", " + lon +
                 ", " + elv +
                 ", " + altitudeMode.getNodeName() +
+                ", " + groundLevel +
                 ']';
     }
 
@@ -74,7 +78,7 @@ public class Coordinate {
             case RELATIVE_TO_GROUND:
             case DEFAULT:
                 if (groundLevel == null) {
-                    groundLevel = AltitudeProcessor.defaultProcessor.getAltitude(this);
+                    groundLevel = AltitudeProcessor.defaultProcessor.getGroundLevel(this);
                 }
                 return groundLevel + getElevation();
             default:

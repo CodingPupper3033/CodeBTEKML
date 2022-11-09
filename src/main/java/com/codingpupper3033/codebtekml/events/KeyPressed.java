@@ -1,7 +1,7 @@
 package com.codingpupper3033.codebtekml.events;
 
 import com.codingpupper3033.codebtekml.KeyInit;
-import com.codingpupper3033.codebtekml.gui.screens.GuiDrawKML;
+import com.codingpupper3033.codebtekml.helpers.map.altitude.AltitudeProcessor;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
@@ -15,7 +15,8 @@ public class KeyPressed {
     public void clientTick(ClientTickEvent event) {
         if (Minecraft.getMinecraft().currentScreen == null) { // Keystrokes that only work on the default game menu
             // Open KML Menu
-            if (KeyInit.openKMLMenuKeybind.isPressed()) Minecraft.getMinecraft().displayGuiScreen(new GuiDrawKML(null));
+            //if (KeyInit.openKMLMenuKeybind.isPressed()) Minecraft.getMinecraft().displayGuiScreen(new GuiDrawKML(null));
+            if (KeyInit.openKMLMenuKeybind.isPressed()) AltitudeProcessor.defaultProcessor.processCoordinateQueue();
         }
     }
 }
