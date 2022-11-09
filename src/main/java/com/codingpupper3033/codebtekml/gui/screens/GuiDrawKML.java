@@ -5,6 +5,7 @@ import com.codingpupper3033.codebtekml.gui.buttons.IconButton;
 import com.codingpupper3033.codebtekml.gui.widgets.BlockPreview;
 import com.codingpupper3033.codebtekml.helpers.block.BlockNameConverter;
 import com.codingpupper3033.codebtekml.helpers.kmlfile.KMLParser;
+import com.codingpupper3033.codebtekml.helpers.map.Placemark;
 import com.codingpupper3033.codebtekml.helpers.map.altitude.AltitudeProcessor;
 import com.codingpupper3033.codebtekml.helpers.map.placemark.PlacemarkFactory;
 import net.minecraft.client.gui.GuiButton;
@@ -266,25 +267,29 @@ public class GuiDrawKML extends GuiScreen {
      * Using the values from the text boxes, try parsing and building the file.
      */
     public void build() {
-        Document[] documents;
-        try {
-            documents = KMLParser.parse(new File(fileNameTextBox.getText())); // TODO Add loading/parsing text (maybe below build button) to the screen to signify it is doing stuff even if it looks frozen
-        } catch (IOException e) {
-            errorFileText = ERROR_FINDING_FILE_TEXT;
-            return;
-        } catch (ParserConfigurationException e) {
-            errorFileText = ERROR_READING_FILE_TEXT;
-            return;
-        } catch (SAXException e) {
-            errorFileText = ERROR_READING_FILE_TEXT;
-            return;
-        }
+        new Thread(() -> { // New thread as to allow for loading screen TODO Make loading screen
+            Document[] documents;
 
-        close(); // Should have successfully processed the file, gui is not needed now
+            try {
+                documents = KMLParser.parse(new File(fileNameTextBox.getText())); // TODO Add loading/parsing text (maybe below build button) to the screen to signify it is doing stuff even if it looks frozen
+            } catch (IOException e) {
+                errorFileText = ERROR_FINDING_FILE_TEXT;
+                return;
+            } catch (ParserConfigurationException e) {
+                errorFileText = ERROR_READING_FILE_TEXT;
+                return;
+            } catch (SAXException e) {
+                errorFileText = ERROR_READING_FILE_TEXT;
+                return;
+            }
 
-        // Draw! (new thread, so you can see it doing its thing)
-        new Thread(() -> {
-            PlacemarkFactory.drawPlacemarks(documents, blockNameTextBox.getText());
+            Placemark[] placemarks = PlacemarkFactory.getPlacemarks(documents);
+
+            // Process Altitudes
+            PlacemarkFactory.proccessPlacemarks(placemarks);
+
+            close(); // Should have successfully processed the file, gui is not needed now
+            PlacemarkFactory.drawPlacemarks(placemarks, blockNameTextBox.getText()); // Draw!
         }).start();
     }
 

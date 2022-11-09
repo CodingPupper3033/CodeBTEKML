@@ -3,6 +3,7 @@ package com.codingpupper3033.codebtekml.helpers.map.altitude;
 import com.codingpupper3033.codebtekml.helpers.map.Coordinate;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -56,6 +57,10 @@ public class AltitudeProcessor {
 
     public void addCoordinateToProcessQueue(Coordinate coordinate) {
         coordinateProcessorQueue.add(coordinate);
+    }
+
+    public void addCoordinatesToProcessQueue(Coordinate[] coordinates) {
+        coordinateProcessorQueue.addAll(Arrays.asList(coordinates));
     }
 
     public Queue<Coordinate> getCoordinateProcessorQueue() {

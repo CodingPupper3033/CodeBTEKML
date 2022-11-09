@@ -2,6 +2,7 @@ package com.codingpupper3033.codebtekml.helpers.map.placemark;
 
 import com.codingpupper3033.codebtekml.helpers.kmlfile.KMLParser;
 import com.codingpupper3033.codebtekml.helpers.map.Placemark;
+import com.codingpupper3033.codebtekml.helpers.map.altitude.AltitudeProcessor;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -90,14 +91,23 @@ public class PlacemarkFactory {
     }
 
     /**
+     * Draws all placemarks from the array
+     * @param placemarks Placemarks to draw
+     * @param blockName block name to draw with
+     */
+    public static void drawPlacemarks(Placemark[] placemarks, String blockName) {
+        for (Placemark placemark : placemarks) {
+            placemark.draw(blockName);
+        }
+    }
+
+    /**
      * Draw all placemarks in the document with specified block name
      * @param documents documents to draw
      * @param blockName block name to draw with
      */
     public static void drawPlacemarks(Document[] documents, String blockName) {
-        for (Placemark placemark : getPlacemarks(documents)) {
-            placemark.draw(blockName);
-        }
+         drawPlacemarks(getPlacemarks(documents), blockName);
     }
 
     /**
@@ -110,5 +120,12 @@ public class PlacemarkFactory {
      */
     public static void drawPlacemarks(File f, String blockName) throws ParserConfigurationException, IOException, SAXException {
         drawPlacemarks(KMLParser.parse(f), blockName);
+    }
+
+    public static void proccessPlacemarks(Placemark[] placemarks) {
+        for (Placemark placemark: placemarks) {
+            AltitudeProcessor.defaultProcessor.addCoordinatesToProcessQueue(placemark.getCoordinates());
+        }
+        AltitudeProcessor.defaultProcessor.processCoordinateQueue();
     }
 }
