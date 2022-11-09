@@ -1,4 +1,4 @@
-package com.codingpupper3033.btekml.gui;
+package com.codingpupper3033.codebtekml.helpers.block;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
@@ -6,8 +6,12 @@ import net.minecraft.item.ItemStack;
 import java.util.AbstractMap;
 import java.util.Map;
 
+/**
+ * Helps to convert between block names, metas, and strings.
+ * @author Joshua Miller
+ */
 public class BlockNameConverter {
-    public static final String metaSplit = ":";
+    public static final String metaSplit = ":"; // Thing that splits the name from the meta
 
     public static AbstractMap.SimpleEntry<String, Integer> getBlockNameAndMeta(String blockName) {
         int meta = 0;

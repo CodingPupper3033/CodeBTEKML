@@ -1,4 +1,4 @@
-package com.codingpupper3033.btekml.mapdrawer;
+package com.codingpupper3033.codebtekml.mapdrawer;
 
 import net.minecraft.client.Minecraft;
 
@@ -6,7 +6,11 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
-public class Command {
+/**
+ * Sends Minecraft commands to the game
+ * @author Joshua Miller
+ */
+public class CommandSender {
     static PrintStream out = new PrintStream(new CommandOutputStream());
 
     private static class CommandOutputStream extends OutputStream {

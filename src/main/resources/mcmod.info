@@ -1,9 +1,9 @@
 [
   {
-    "modid": "btekml",
+    "modid": "codebtekml",
     "name": "BTE KML Importer",
     "description": "Imports KML and KMZ files into the Build the Earth server. KML & KMZ are standard ways to export points and lines on a map.",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "mcversion": "1.12.2",
     "url": "",
     "updateUrl": "",

@@ -1,13 +1,12 @@
-package com.codingpupper3033.btekml.gui.screens;
+package com.codingpupper3033.codebtekml.gui.screens;
 
-import com.codingpupper3033.btekml.KeyInit;
-import com.codingpupper3033.btekml.gui.BlockNameConverter;
-import com.codingpupper3033.btekml.gui.buttons.IconButton;
-import com.codingpupper3033.btekml.gui.widgets.BlockPreview;
-import com.codingpupper3033.btekml.kmlfileprocessor.KMLParser;
-import com.codingpupper3033.btekml.maphelpers.altitude.AltitudeProcessor;
-import com.codingpupper3033.btekml.maphelpers.placemark.PlacemarkFactory;
-import javafx.util.Pair;
+import com.codingpupper3033.codebtekml.KeyInit;
+import com.codingpupper3033.codebtekml.gui.buttons.IconButton;
+import com.codingpupper3033.codebtekml.gui.widgets.BlockPreview;
+import com.codingpupper3033.codebtekml.helpers.block.BlockNameConverter;
+import com.codingpupper3033.codebtekml.helpers.kmlfile.KMLParser;
+import com.codingpupper3033.codebtekml.helpers.map.altitude.AltitudeProcessor;
+import com.codingpupper3033.codebtekml.helpers.map.placemark.PlacemarkFactory;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
@@ -21,16 +20,20 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
-import java.util.AbstractMap;
 import java.util.Map;
 
+/**
+ * Gui Screen to bui;d the KMZ/KML file.
+ * @author Joshua Miller
+ */
 public class GuiDrawKML extends GuiScreen {
     // Parent
     private GuiScreen parentScreen;
 
-    // File Name
+    // File Name Text Box
     public static final int FILE_NAME_TEXT_BOX_ID = 1;
-    public static final String FILE_NAME_TEXT_BOX_TEXT = javax.swing.filechooser.FileSystemView.getFileSystemView().getHomeDirectory().getAbsolutePath();
+    public static final String DEFAULT_FILE_NAME_TEXT_BOX_TEXT = javax.swing.filechooser.FileSystemView.getFileSystemView().getHomeDirectory().getAbsolutePath(); // Default path is Desktop cause why not
+    public static final int MAX_FILE_PATH_CHARACTERS = 260; // windows limit according to the first bing result, TODO maybe change to programmatic, but like very insignificant as you just shouldn't need this many characters bro.
     private static final int[] FILE_NAME_TEXT_BOX_POS = {-155,0};
     public static final int[] FILE_NAME_TEXT_BOX_SIZE = {280,20};
     private GuiTextField fileNameTextBox;
@@ -41,10 +44,10 @@ public class GuiDrawKML extends GuiScreen {
     private static final int[] SELECT_FILE_BUTTON_POS = {135, 0};
     private GuiButton selectFileButton;
 
-    // Error Finding file
+    // File Error String
     public static final String ERROR_FINDING_FILE_TEXT = "Unable to find file location. Please try again.";
     public static final String ERROR_READING_FILE_TEXT = "Error reading file. Please try another.";
-    public static final int ERROR_FILE_COLOR = 0xAA0000;
+    public static final int ERROR_FILE_COLOR = 0xAA0000; // Same as Minecraft dark red, but TODO get dark red programmatically?
 
     private static final int[] ERROR_FILE_POS = {-145, 25};
     private String errorFileText = "";
@@ -53,13 +56,16 @@ public class GuiDrawKML extends GuiScreen {
     private static final int[] BLOCK_PREVIEW_POS = {-154, 36};
     private BlockPreview blockPreview;
 
-    // Block Name
+    // Block Name Text Box
     public static final int BLOCK_NAME_TEXT_BOX_ID = 3;
     public static final int[] BLOCK_NAME_TEXT_BOX_POS = {-95,40};
     public static final int[] BLOCK_NAME_TEXT_BOX_SIZE = {220,20};
+    public final String defaultBlockName = "gold_block";
+    public final String nullBlockName = "air";
+    public boolean getBlockNameFromInventory = true; // When opening the GUI should it autopopulate with the held item?
     private GuiTextField blockNameTextBox;
 
-    // Block Name Help
+    // Block Name Help Icon
     public static final int BLOCK_HELP_ID = 4;
     public static final String BLOCK_HELP_HOVER_TEXT = "Block used to trace outline";
     private static final int[] BLOCK_HELP_POS = {135, 40};
@@ -71,13 +77,19 @@ public class GuiDrawKML extends GuiScreen {
     public static final String API_CHECK_BOX_TEXT = "Get ground level from the internet";
     private GuiCheckBox apiCheckBox;
 
-    // Build! Button
+    // Build Button
     public static final int BUILD_BUTTON_ID = 6;
     public static final String BUILD_BUTTON_TEXT = "Build";
     public static final int[] BUILD_BUTTON_POS = {-50,85};
     public static final int[] BUILD_BUTTON_SIZE = {100,20};
     private GuiButton buildButton;
 
+
+    /**
+     * Instantiates a new Gui for drawing kml/kmz files.
+     *
+     * @param parentScreen the parent screen
+     */
     public GuiDrawKML(GuiScreen parentScreen) {
         this.parentScreen = parentScreen;
     }
@@ -86,27 +98,26 @@ public class GuiDrawKML extends GuiScreen {
     public void initGui() {
         super.initGui();
 
+        // Helper variables for adding gui elements
         int guiMiddleX = width/2;
         int guiStartY = height/6;
 
-        String blockName = "gold"; // Default
-        { // Get items in hand
+        String blockName = defaultBlockName; // Default block name in case nothing in hands
+        if (getBlockNameFromInventory) { // Tries setting the block to held block
             Map.Entry mainHand = BlockNameConverter.getBlockNameAndMeta(mc.player.getHeldItemMainhand());
             Map.Entry offHand = BlockNameConverter.getBlockNameAndMeta(mc.player.getHeldItemOffhand());
 
-            String nullName = "air";
-
-            if (!mainHand.getKey().toString().toLowerCase().equals(nullName)) {
+            if (!mainHand.getKey().toString().equalsIgnoreCase(nullBlockName)) { // check if block in main hand
                 blockName = BlockNameConverter.getBlockCombinedName(mainHand);
-            } else if (!offHand.getKey().toString().toLowerCase().equals(nullName)) {
+            } else if (!offHand.getKey().toString().equalsIgnoreCase(nullBlockName)) { // How 'bout offhand?
                 blockName = BlockNameConverter.getBlockCombinedName(offHand);
-            }
+            } //shit, no srry dude
         }
 
         // File Name Text Box
         fileNameTextBox = new GuiTextField(FILE_NAME_TEXT_BOX_ID, mc.fontRenderer, guiMiddleX+FILE_NAME_TEXT_BOX_POS[0],guiStartY+FILE_NAME_TEXT_BOX_POS[1], FILE_NAME_TEXT_BOX_SIZE[0], FILE_NAME_TEXT_BOX_SIZE[1]);
-        fileNameTextBox.setText(FILE_NAME_TEXT_BOX_TEXT);
-        fileNameTextBox.setMaxStringLength(260);
+        fileNameTextBox.setText(DEFAULT_FILE_NAME_TEXT_BOX_TEXT);
+        fileNameTextBox.setMaxStringLength(MAX_FILE_PATH_CHARACTERS);
 
         // Select File Button
         selectFileButton = new IconButton(IconButton.ICON.FILE, SELECT_FILE_BUTTON_ID, guiMiddleX+ SELECT_FILE_BUTTON_POS[0],guiStartY+ SELECT_FILE_BUTTON_POS[1]);
@@ -117,7 +128,6 @@ public class GuiDrawKML extends GuiScreen {
 
         // Block Name Text Box
         blockNameTextBox = new GuiTextField(BLOCK_NAME_TEXT_BOX_ID, mc.fontRenderer, guiMiddleX+BLOCK_NAME_TEXT_BOX_POS[0], guiStartY+BLOCK_NAME_TEXT_BOX_POS[1], BLOCK_NAME_TEXT_BOX_SIZE[0], BLOCK_NAME_TEXT_BOX_SIZE[1]);
-
         blockNameTextBox.setText(blockName);
         blockNameTextBox.setMaxStringLength(64);
 
@@ -137,15 +147,16 @@ public class GuiDrawKML extends GuiScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        drawDefaultBackground();
+        drawDefaultBackground(); // It greyish :)
 
+        // Helper variables for adding gui elements
         int guiMiddleX = width/2;
         int guiStartY = height/6;
 
-        // Draw File location Text Box
+        // Draw File Location Text Box
         fileNameTextBox.drawTextBox();
 
-        // Draw can't find file error
+        // Draw File Error
         drawString(mc.fontRenderer, errorFileText, guiMiddleX+ ERROR_FILE_POS[0],guiStartY+ ERROR_FILE_POS[1], ERROR_FILE_COLOR);
 
         // Render Selected Block
@@ -175,20 +186,19 @@ public class GuiDrawKML extends GuiScreen {
         // File Name Text Box
         fileNameTextBox.textboxKeyTyped(typedChar, keyCode);
 
-        if (fileNameTextBox.getVisible()) { // Hide error if you are changing it
+        if (fileNameTextBox.getVisible()) { // Hide error if you are changing the file. Basically be less annoying
             errorFileText = "";
         }
 
         // Block Name Text Box
         blockNameTextBox.textboxKeyTyped(typedChar, keyCode);
-
-        if (blockNameTextBox.isFocused()) {
+        if (blockNameTextBox.isFocused()) { // Update Block Preview to match the text box
             blockPreview.setBlockName(blockNameTextBox.getText());
         }
 
-        // Not Selecting Box
-        if (!fileNameTextBox.isFocused() && !blockNameTextBox.isFocused()) { // To close, text boxes can't be selected
-            if (keyCode == KeyInit.openKMLMenuKeybind.getKeyCode()) { // Close
+        // ------
+        if (!fileNameTextBox.isFocused() && !blockNameTextBox.isFocused()) { // Not selecting any box
+            if (keyCode == KeyInit.openKMLMenuKeyBind.getKeyCode()) { // Close
                 close();
             }
 
@@ -224,39 +234,41 @@ public class GuiDrawKML extends GuiScreen {
     protected void actionPerformed(GuiButton button) throws IOException {
         super.actionPerformed(button);
 
-        switch (button.id) {
-            case SELECT_FILE_BUTTON_ID:
-                // Make it not look like shit
+        switch (button.id) { // Who did it?
+            case SELECT_FILE_BUTTON_ID: // Selecting a file time
+                // Make open file dialog not look like as shit
                 try {
                     UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
                 }catch(Exception ex) {
                     ex.printStackTrace();
                 }
-                FileNameExtensionFilter filter = new FileNameExtensionFilter("kmz or kml file","kmz","kml");
+                FileNameExtensionFilter filter = new FileNameExtensionFilter("kmz or kml file","kmz","kml"); // Files generally supported (but not enforced)
 
                 //Create a file chooser
                 final JFileChooser fc = new JFileChooser();
                 fc.setFileFilter(filter); // Set filter to kmz/kml
 
                 if (fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-                    // Set textbox w/ file name to file name
+                    // Set file name textbox to file name from dialog
                     fileNameTextBox.setText(fc.getSelectedFile().getAbsolutePath());
-
                 }
                 break;
-            case API_CHECK_BOX_ID:
-                AltitudeProcessor.defaultProcessor.enabled = apiCheckBox.isChecked();
+            case API_CHECK_BOX_ID: // Api setting
+                AltitudeProcessor.defaultProcessor.enabled = apiCheckBox.isChecked(); // Can my boi process altitudes (using the internet)
                 break;
-            case BUILD_BUTTON_ID:
+            case BUILD_BUTTON_ID: // Do ya thing!
                 build();
                 break;
         }
     }
 
+    /**
+     * Using the values from the text boxes, try parsing and building the file.
+     */
     public void build() {
         Document[] documents;
         try {
-            documents = KMLParser.parse(new File(fileNameTextBox.getText()));
+            documents = KMLParser.parse(new File(fileNameTextBox.getText())); // TODO Add loading/parsing text (maybe below build button) to the screen to signify it is doing stuff even if it looks frozen
         } catch (IOException e) {
             errorFileText = ERROR_FINDING_FILE_TEXT;
             return;
@@ -268,14 +280,15 @@ public class GuiDrawKML extends GuiScreen {
             return;
         }
 
-        close();
+        close(); // Should have successfully processed the file, gui is not needed now
 
-        // Draw!
+        // Draw! (new thread, so you can see it doing its thing)
         new Thread(() -> {
             PlacemarkFactory.drawPlacemarks(documents, blockNameTextBox.getText());
         }).start();
     }
 
+    // Bye bye!
     public void close() {
         mc.displayGuiScreen(parentScreen);
     }

@@ -1,8 +1,12 @@
-package com.codingpupper3033.btekml.mapdrawer;
+package com.codingpupper3033.codebtekml.mapdrawer;
 
-import com.codingpupper3033.btekml.maphelpers.Coordinate;
+import com.codingpupper3033.codebtekml.helpers.map.Coordinate;
 
-public class WorldEdit {
+/**
+ * Commands able to be sent to the Minecraft Game
+ * @author Joshua Miller
+ */
+public class MinecraftCommands {
     private static final String TPLL_COMMAND = "/tpll %s %s %s";
 
     public static final String POS_COMMAND = "//pos%s";
@@ -14,17 +18,25 @@ public class WorldEdit {
     public static final String AIR_BLOCK = "air";
 
 
+    /**
+     * Sends a singular command
+     * @param command String of the command to send
+     */
     public static void send(String command){
-        Command.out.println(command);
+        CommandSender.out.println(command);
     }
 
+    /**
+     * Sends all commands in list
+     * @param commands Strings of command to send
+     */
     public static void sendAll(String[] commands) {
         for (String command : commands) {
             send(command);
         }
     }
 
-    // World Edit
+    // BTE
     public static void tpll(Coordinate coordinate) {
         String command;
         try {
@@ -36,6 +48,8 @@ public class WorldEdit {
         send(command);
     }
 
+
+    // World Edit
     public static void pos(int numb) {
         send(String.format(POS_COMMAND, numb));
     }
@@ -69,7 +83,7 @@ public class WorldEdit {
     }
 
 
-    // Friendlier
+    // Friendlier Commands
     public static void clearSelection() {
         sel("");
     }

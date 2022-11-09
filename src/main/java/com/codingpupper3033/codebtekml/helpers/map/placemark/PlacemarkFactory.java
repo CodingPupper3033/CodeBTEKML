@@ -1,7 +1,7 @@
-package com.codingpupper3033.btekml.maphelpers.placemark;
+package com.codingpupper3033.codebtekml.helpers.map.placemark;
 
-import com.codingpupper3033.btekml.kmlfileprocessor.KMLParser;
-import com.codingpupper3033.btekml.maphelpers.Placemark;
+import com.codingpupper3033.codebtekml.helpers.kmlfile.KMLParser;
+import com.codingpupper3033.codebtekml.helpers.map.Placemark;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -13,14 +13,24 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * Creates Placemarks Based upon type
+ * @author Joshua Miller
+ */
 public class PlacemarkFactory {
+    /**
+     * Gets Placemark based upon the given element
+     * @param element Element to get sub-placemark of
+     * @return Placemark
+     */
     public static Placemark getPlacemark(Element element) {
         // Loop Through Child nodes
         NodeList childNodes = element.getChildNodes();
         for (int i = 0; i < childNodes.getLength(); i++) {
-            if (childNodes.item(i).getNodeType() != Node.ELEMENT_NODE) continue;
+            if (childNodes.item(i).getNodeType() != Node.ELEMENT_NODE) continue; // Has to be an element node
+
             Element currentChildElement = ((Element) childNodes.item(i));
-            switch (currentChildElement.getTagName()) {
+            switch (currentChildElement.getTagName()) { // Figure out type of element
                 case "LineString":
                     return new LineString(currentChildElement);
                 case "Point":
@@ -28,15 +38,20 @@ public class PlacemarkFactory {
             }
         }
 
-        return null;
+        return null; // Unable to determine the type of the placemark
     }
 
+    /**
+     * Gets all placemarks from the document
+     * @param document Document to get placemarks from
+     * @return List of Placemarks
+     */
     public static Placemark[] getPlacemarks(Document document) {
         Element[] placemarkElements = KMLParser.getPlacemarkElements(document);
 
         Placemark[] placemarks = new Placemark[placemarkElements.length];
 
-        for (int i = 0; i < placemarkElements.length; i++) {
+        for (int i = 0; i < placemarkElements.length; i++) { // Add all placemarks
             Element placemarkElement = placemarkElements[i];
             placemarks[i] = (PlacemarkFactory.getPlacemark(placemarkElement));
         }
@@ -44,29 +59,55 @@ public class PlacemarkFactory {
         return placemarks;
     }
 
+    /**
+     * Gets all placemarks from the documents
+     * @param documents Documents to get placemarks from
+     * @return List of Placemarks in all documents
+     */
     public static Placemark[] getPlacemarks(Document[] documents) {
         ArrayList<Placemark> out = new ArrayList<>();
 
-        for (Document document : documents) {
-            for (Placemark placemark : getPlacemarks(document)) {
+        for (Document document : documents) { // Loop through all documents
+            for (Placemark placemark : getPlacemarks(document)) { // add all placemarks (this way as getPlacemarks returns an array not list)
                 out.add(placemark);
             }
         }
 
-        Placemark[] placemarks = new Placemark[out.size()];
+        Placemark[] placemarks = new Placemark[out.size()]; // yeet to array
         return out.toArray(placemarks);
     }
 
+    /**
+     * Parse all placemarks from a file
+     * @param f file to parse
+     * @return list of placemarks in the file
+     * @throws ParserConfigurationException
+     * @throws IOException
+     * @throws SAXException
+     */
     public static Placemark[] getPlacemarks(File f) throws ParserConfigurationException, IOException, SAXException {
         return getPlacemarks(KMLParser.parse(f));
     }
 
+    /**
+     * Draw all placemarks in the document with specified block name
+     * @param documents documents to draw
+     * @param blockName block name to draw with
+     */
     public static void drawPlacemarks(Document[] documents, String blockName) {
         for (Placemark placemark : getPlacemarks(documents)) {
             placemark.draw(blockName);
         }
     }
 
+    /**
+     * Draws all placemarks in a file
+     * @param f file
+     * @param blockName block name
+     * @throws ParserConfigurationException
+     * @throws IOException
+     * @throws SAXException
+     */
     public static void drawPlacemarks(File f, String blockName) throws ParserConfigurationException, IOException, SAXException {
         drawPlacemarks(KMLParser.parse(f), blockName);
     }
