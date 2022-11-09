@@ -13,13 +13,13 @@ import java.util.Queue;
  * @see AltitudeMode
  * @author Joshua Miller
  */
-public class AltitudeProcessor {
+public class GoundLevelProcessor {
     /**
      * Default Altitude Processor
      * Currently it uses Open Elevation, as there appears to be no way to get ground level in java.
      * The downside is that it requires internet access to make API requests.
      */
-    public static AltitudeProcessor defaultProcessor = new OpenElevationAltitudeProcessor();
+    public static GoundLevelProcessor defaultProcessor = new OpenElevationGoundLevelProcessor();
 
     /**
      * Can we use this?
@@ -29,7 +29,7 @@ public class AltitudeProcessor {
     /**
      * List of coordinates to process
      */
-    private Queue<Coordinate> coordinateProcessorQueue = new LinkedList<>();
+    private Queue<Coordinate> coordinateGroundLevelProcessorQueue = new LinkedList<>();
 
     /**
      * Default altitude method. Should not be used.
@@ -56,24 +56,23 @@ public class AltitudeProcessor {
     }
 
     public void addCoordinateToProcessQueue(Coordinate coordinate) {
-        coordinateProcessorQueue.add(coordinate);
+        coordinateGroundLevelProcessorQueue.add(coordinate);
     }
 
     public void addCoordinatesToProcessQueue(Coordinate[] coordinates) {
-        coordinateProcessorQueue.addAll(Arrays.asList(coordinates));
+        coordinateGroundLevelProcessorQueue.addAll(Arrays.asList(coordinates));
     }
 
-    public Queue<Coordinate> getCoordinateProcessorQueue() {
-        return coordinateProcessorQueue;
+    public Queue<Coordinate> getCoordinateGroundLevelProcessorQueue() {
+        return coordinateGroundLevelProcessorQueue;
     }
 
     /**
      * Empties the process coordinate queue
      *
-     * @return
+     * @return Whether it succeeded
      */
-    public boolean processCoordinateQueue() {
-
+    public boolean processCoordinateGroundLevelQueue() {
         return false;
     }
 }

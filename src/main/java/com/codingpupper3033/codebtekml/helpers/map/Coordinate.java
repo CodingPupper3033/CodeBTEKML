@@ -1,7 +1,7 @@
 package com.codingpupper3033.codebtekml.helpers.map;
 
 import com.codingpupper3033.codebtekml.helpers.map.altitude.AltitudeMode;
-import com.codingpupper3033.codebtekml.helpers.map.altitude.AltitudeProcessor;
+import com.codingpupper3033.codebtekml.helpers.map.altitude.GoundLevelProcessor;
 import com.codingpupper3033.codebtekml.helpers.map.altitude.NoAltitudeException;
 
 import java.io.IOException;
@@ -78,7 +78,7 @@ public class Coordinate {
             case RELATIVE_TO_GROUND:
             case DEFAULT:
                 if (groundLevel == null) {
-                    groundLevel = AltitudeProcessor.defaultProcessor.getGroundLevel(this);
+                    groundLevel = GoundLevelProcessor.defaultProcessor.getGroundLevel(this);
                 }
                 return groundLevel + getElevation();
             default:

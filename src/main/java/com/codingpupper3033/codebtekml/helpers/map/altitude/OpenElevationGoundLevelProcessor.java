@@ -17,7 +17,7 @@ import java.net.URLConnection;
  * Uses the Open Elevation API to process altitudes.
  * @author Joshua Miller
  */
-public class OpenElevationAltitudeProcessor extends AltitudeProcessor {
+public class OpenElevationGoundLevelProcessor extends GoundLevelProcessor {
     public static final String URL = "https://api.open-elevation.com/api/v1/lookup?locations=%s"; // Path and format of the api url
     public static final String LOCATIONS_CONCAT = "|"; // How to combine multiple locations
 
@@ -93,14 +93,14 @@ public class OpenElevationAltitudeProcessor extends AltitudeProcessor {
      * @return
      */
     @Override
-    public boolean processCoordinateQueue() {
-        super.processCoordinateQueue();
+    public boolean processCoordinateGroundLevelQueue() {
+        super.processCoordinateGroundLevelQueue();
 
-        while (!getCoordinateProcessorQueue().isEmpty()) { // Keep working until all out
-            Coordinate[] setOfLocationsToProcess = new Coordinate[Math.min(MAX_COORDINATES_PER_REQUEST,getCoordinateProcessorQueue().size())]; // Make it only as big as needed
+        while (!getCoordinateGroundLevelProcessorQueue().isEmpty()) { // Keep working until all out
+            Coordinate[] setOfLocationsToProcess = new Coordinate[Math.min(MAX_COORDINATES_PER_REQUEST, getCoordinateGroundLevelProcessorQueue().size())]; // Make it only as big as needed
             int i = 0;
-            while (!getCoordinateProcessorQueue().isEmpty() && i < setOfLocationsToProcess.length) { // Only do the max size at a time
-                setOfLocationsToProcess[i] = getCoordinateProcessorQueue().poll();
+            while (!getCoordinateGroundLevelProcessorQueue().isEmpty() && i < setOfLocationsToProcess.length) { // Only do the max size at a time
+                setOfLocationsToProcess[i] = getCoordinateGroundLevelProcessorQueue().poll();
                 i++;
             }
 

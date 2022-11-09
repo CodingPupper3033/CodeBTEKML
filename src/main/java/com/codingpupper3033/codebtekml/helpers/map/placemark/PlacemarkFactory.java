@@ -2,7 +2,7 @@ package com.codingpupper3033.codebtekml.helpers.map.placemark;
 
 import com.codingpupper3033.codebtekml.helpers.kmlfile.KMLParser;
 import com.codingpupper3033.codebtekml.helpers.map.Placemark;
-import com.codingpupper3033.codebtekml.helpers.map.altitude.AltitudeProcessor;
+import com.codingpupper3033.codebtekml.helpers.map.altitude.GoundLevelProcessor;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -124,8 +124,8 @@ public class PlacemarkFactory {
 
     public static void proccessPlacemarks(Placemark[] placemarks) {
         for (Placemark placemark: placemarks) {
-            AltitudeProcessor.defaultProcessor.addCoordinatesToProcessQueue(placemark.getCoordinates());
+            GoundLevelProcessor.defaultProcessor.addCoordinatesToProcessQueue(placemark.getCoordinates());
         }
-        AltitudeProcessor.defaultProcessor.processCoordinateQueue();
+        GoundLevelProcessor.defaultProcessor.processCoordinateGroundLevelQueue();
     }
 }
