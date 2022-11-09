@@ -8,10 +8,10 @@ import org.lwjgl.input.Keyboard;
  * Binds the key binds of the mod
  */
 public final class KeyInit {
-    public static KeyBinding openKMLMenuKeyBind;
+    public static KeyBinding openKMLMenuKeybind;
 
     public static void init() {
-        openKMLMenuKeyBind = registerKey("Open KMZ Menu", "BTE KML", Keyboard.KEY_PERIOD);
+        openKMLMenuKeybind = registerKey("Open KMZ Menu", "BTE KML", Keyboard.KEY_PERIOD);
     }
 
     public static KeyBinding registerKey(String name, String category, int keycode) {

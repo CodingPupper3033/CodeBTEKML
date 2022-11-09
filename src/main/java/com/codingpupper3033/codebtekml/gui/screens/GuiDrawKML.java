@@ -198,7 +198,7 @@ public class GuiDrawKML extends GuiScreen {
 
         // ------
         if (!fileNameTextBox.isFocused() && !blockNameTextBox.isFocused()) { // Not selecting any box
-            if (keyCode == KeyInit.openKMLMenuKeyBind.getKeyCode()) { // Close
+            if (keyCode == KeyInit.openKMLMenuKeybind.getKeyCode()) { // Close
                 close();
             }
 

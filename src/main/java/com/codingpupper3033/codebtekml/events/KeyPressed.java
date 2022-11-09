@@ -15,7 +15,7 @@ public class KeyPressed {
     public void clientTick(ClientTickEvent event) {
         if (Minecraft.getMinecraft().currentScreen == null) { // Keystrokes that only work on the default game menu
             // Open KML Menu
-            if (KeyInit.openKMLMenuKeyBind.isPressed()) Minecraft.getMinecraft().displayGuiScreen(new GuiDrawKML(null));
+            if (KeyInit.openKMLMenuKeybind.isPressed()) Minecraft.getMinecraft().displayGuiScreen(new GuiDrawKML(null));
         }
     }
 }

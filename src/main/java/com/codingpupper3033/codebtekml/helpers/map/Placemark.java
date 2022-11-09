@@ -16,6 +16,8 @@ public abstract class Placemark {
 
     }
 
+    //public abstract Coordinate[] getCoordinates();
+
     /**
      * Should draw the placemark into the game
      * @param blockName
