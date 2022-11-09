@@ -16,8 +16,6 @@ public class LineString extends Placemark {
     private final Coordinate[] coordinates;
 
     public LineString(Element element) {
-        super(element);
-
         coordinates = KMLParser.getElementCoordinates(element);
     }
 

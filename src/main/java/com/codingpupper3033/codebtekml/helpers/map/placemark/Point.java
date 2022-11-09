@@ -14,8 +14,6 @@ public class Point extends Placemark {
     private final Coordinate coordinate;
 
     public Point(Element element) {
-        super(element);
-
         coordinate = KMLParser.getElementCoordinates(element)[0]; // Only one coordinate as it is a point
     }
 
