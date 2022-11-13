@@ -54,7 +54,8 @@ public class GuiDrawKML extends GuiScreen {
     private String errorFileText = "";
 
     // Block Preview
-    private static final int[] BLOCK_PREVIEW_POS = {-154, 36};
+    private static final int[] BLOCK_PREVIEW_POS = {-155, 35};
+    public static final int[] BLOCK_PREVIEW_SIZE = {50,50};
     private BlockPreview blockPreview;
 
     // Block Name Text Box
@@ -125,7 +126,7 @@ public class GuiDrawKML extends GuiScreen {
         addButton(selectFileButton);
 
         // Block Preview
-        blockPreview = new BlockPreview(guiMiddleX+BLOCK_PREVIEW_POS[0], guiStartY+BLOCK_PREVIEW_POS[1],50,50, blockName);
+        blockPreview = new BlockPreview(guiMiddleX+BLOCK_PREVIEW_POS[0], guiStartY+BLOCK_PREVIEW_POS[1],BLOCK_PREVIEW_SIZE[0],BLOCK_PREVIEW_SIZE[1], blockName);
 
         // Block Name Text Box
         blockNameTextBox = new GuiTextField(BLOCK_NAME_TEXT_BOX_ID, mc.fontRenderer, guiMiddleX+BLOCK_NAME_TEXT_BOX_POS[0], guiStartY+BLOCK_NAME_TEXT_BOX_POS[1], BLOCK_NAME_TEXT_BOX_SIZE[0], BLOCK_NAME_TEXT_BOX_SIZE[1]);

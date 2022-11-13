@@ -65,8 +65,20 @@ public class BlockPreview extends Gui {
             ItemStack itemStack = new ItemStack(block,1,nameMetaPair.getValue()); // Get item (+meta)
 
             RenderHelper.enableGUIStandardItemLighting(); // Bright boi
-            GlStateManager.translate(x, y, 0);
-            GlStateManager.scale(3,3,1); //x3
+
+            //Scale Block Size
+            int scale = Math.min(width/itemSize[0], height/itemSize[1]);
+            int blockWidth = itemSize[0]*scale;
+            int blockHeight = itemSize[1]*scale;
+
+            // Get Icon position
+            int blockRelativeX = (width-blockWidth)/2;
+            int blockRelativeY = (height-blockHeight)/2;
+
+            // Move to icon position
+            GlStateManager.translate(x+blockRelativeX, y+blockRelativeY, 0);
+
+            GlStateManager.scale(scale,scale,1); //x3
 
             mc.getRenderItem().renderItemAndEffectIntoGUI(itemStack,0,0);
         }
