@@ -11,6 +11,26 @@ public class MinecraftCommands {
 
     public static final String POS_COMMAND = "//pos%s";
     public static final String SEL_COMMAND = "//sel %s";
+    public enum SEL_MODES {
+        CUBOID("cuboid"),
+        EXTEND("extend"),
+        POLY("poly"),
+        ELLIPSOID("ellipsoid"),
+        SPHERE("sphere"),
+        CYL("cyl"),
+        CONVEX("convex");
+
+        private final String name;
+
+        SEL_MODES(String name) {
+
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
+    }
 
     public static final String SET_COMMAND = "//set %s";
     public static final String LINE_COMMAND = "//line %s";
@@ -57,6 +77,7 @@ public class MinecraftCommands {
     public static void set(Coordinate pos, String blockName) {
         tpll(pos);
 
+        sel(SEL_MODES.CUBOID);
         pos(1);
         pos(2);
 
@@ -69,10 +90,15 @@ public class MinecraftCommands {
         send(String.format(SEL_COMMAND, method));
     }
 
+    public static void sel(SEL_MODES mode) {
+        sel(mode.getName());
+    }
+
     public static void line(Coordinate start, Coordinate end, String blockName) {
         tpllDelete(start);
         tpllDelete(end);
 
+        sel(SEL_MODES.CUBOID);
         tpll(start);
         pos(1);
         tpll(end);
