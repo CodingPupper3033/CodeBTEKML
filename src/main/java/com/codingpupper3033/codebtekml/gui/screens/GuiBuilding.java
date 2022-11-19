@@ -55,6 +55,24 @@ public class GuiBuilding extends GuiScreen {
         int guiMiddleX = width/2;
         int guiStartY = height/6;
 
+        startBuilding(); // Start Building if not done so already
+
+        // Draw progress
+        if (doProgress) progressBar.drawProgress(progress);
+
+
+        if (finished) { // Draw Done
+            drawCenteredString(Minecraft.getMinecraft().fontRenderer, I18n.format(DONE_TEXT)+"!", guiMiddleX+DONE_POS[0],guiStartY+DONE_POS[1], DONE_COLOR);
+        } else { // TODO Draw Text saying "BUilding"
+
+        }
+
+        // TODO Draw Spiny circle thing
+
+        super.drawScreen(mouseX, mouseY, partialTicks);
+    }
+
+    private void startBuilding() {
         if (!started) { // Start the drawing now
             started = true;
             new Thread(() -> { // New thread as to allow for loading screen
@@ -83,13 +101,5 @@ public class GuiBuilding extends GuiScreen {
                 Minecraft.getMinecraft().displayGuiScreen(null);
             }).start();
         }
-
-        // Draw progress
-        if (doProgress) progressBar.drawProgress(progress);
-
-        // Draw Done
-        if (finished) drawCenteredString(Minecraft.getMinecraft().fontRenderer, I18n.format(DONE_TEXT)+"!", guiMiddleX+DONE_POS[0],guiStartY+DONE_POS[1], DONE_COLOR);
-
-        super.drawScreen(mouseX, mouseY, partialTicks);
     }
 }

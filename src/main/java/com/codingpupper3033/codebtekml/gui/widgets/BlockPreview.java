@@ -12,7 +12,6 @@ import java.util.Map;
 
 /**
  * Allows you to draw a preview of a block more effectively at different scales.
- * TODO Allow different sizes than 50x50 (auto scale from size)
  * @author Joshua Miller
  */
 public class BlockPreview extends Gui {

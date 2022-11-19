@@ -8,7 +8,6 @@ import net.minecraft.util.ResourceLocation;
 
 /**
  * Custom GUI Buttons specifically for the Connect Screen, but could be used elsewhere.
- * The button is always of size 20x20 - TODO change that
  * @author Joshua Miller
  */
 public class IconButton extends GuiButton {
