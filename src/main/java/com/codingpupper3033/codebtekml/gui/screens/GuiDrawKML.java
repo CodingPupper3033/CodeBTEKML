@@ -1,13 +1,14 @@
 package com.codingpupper3033.codebtekml.gui.screens;
 
 import com.codingpupper3033.codebtekml.KeyInit;
-import com.codingpupper3033.codebtekml.gui.buttons.IconButton;
 import com.codingpupper3033.codebtekml.gui.widgets.BlockPreview;
+import com.codingpupper3033.codebtekml.gui.widgets.buttons.IconButton;
 import com.codingpupper3033.codebtekml.helpers.block.BlockNameConverter;
 import com.codingpupper3033.codebtekml.helpers.kmlfile.KMLParser;
 import com.codingpupper3033.codebtekml.helpers.map.Placemark;
 import com.codingpupper3033.codebtekml.helpers.map.altitude.GoundLevelProcessor;
 import com.codingpupper3033.codebtekml.helpers.map.placemark.PlacemarkFactory;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
@@ -31,12 +32,16 @@ public class GuiDrawKML extends GuiScreen {
     // Parent
     private final GuiScreen parentScreen;
 
+    // File Chooser
+    final static JFileChooser FILE_CHOOSER = new JFileChooser();
+
     // File Name Text Box
     public static final int FILE_NAME_TEXT_BOX_ID = 1;
-    public static final String DEFAULT_FILE_NAME_TEXT_BOX_TEXT = javax.swing.filechooser.FileSystemView.getFileSystemView().getHomeDirectory().getAbsolutePath(); // Default path is Desktop cause why not
+    //public static final String DEFAULT_FILE_NAME_TEXT_BOX_TEXT = javax.swing.filechooser.FileSystemView.getFileSystemView().getHomeDirectory().getAbsolutePath(); // Default path is Desktop cause why not
     public static final int MAX_FILE_PATH_CHARACTERS = 260; // windows limit according to the first bing result, TODO maybe change to programmatic, but like very insignificant as you just shouldn't need this many characters bro.
     private static final int[] FILE_NAME_TEXT_BOX_POS = {-155,0};
     public static final int[] FILE_NAME_TEXT_BOX_SIZE = {280,20};
+    private static String lastFileName = null;
     private GuiTextField fileNameTextBox;
 
     // Select File Button
@@ -100,6 +105,11 @@ public class GuiDrawKML extends GuiScreen {
     public void initGui() {
         super.initGui();
 
+        // Set up the filter for the file viewer
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("kmz or kml file","kmz","kml"); // Files generally supported (but not enforced)
+        FILE_CHOOSER.setFileFilter(filter); // Set filter to kmz/kml
+        FILE_CHOOSER.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES); // Allow directories
+
         // Helper variables for adding gui elements
         int guiMiddleX = width/2;
         int guiStartY = height/6;
@@ -118,8 +128,14 @@ public class GuiDrawKML extends GuiScreen {
 
         // File Name Text Box
         fileNameTextBox = new GuiTextField(FILE_NAME_TEXT_BOX_ID, mc.fontRenderer, guiMiddleX+FILE_NAME_TEXT_BOX_POS[0],guiStartY+FILE_NAME_TEXT_BOX_POS[1], FILE_NAME_TEXT_BOX_SIZE[0], FILE_NAME_TEXT_BOX_SIZE[1]);
-        fileNameTextBox.setText(DEFAULT_FILE_NAME_TEXT_BOX_TEXT);
         fileNameTextBox.setMaxStringLength(MAX_FILE_PATH_CHARACTERS);
+        if (lastFileName != null) {
+            fileNameTextBox.setText(lastFileName);
+            FILE_CHOOSER.setSelectedFile(null);
+        } else {
+            updateFileNameText(); // Set text to what the file chooser thinks it should be
+        }
+
 
         // Select File Button
         selectFileButton = new IconButton(IconButton.ICON.FILE, SELECT_FILE_BUTTON_ID, guiMiddleX+ SELECT_FILE_BUTTON_POS[0],guiStartY+ SELECT_FILE_BUTTON_POS[1]);
@@ -238,24 +254,14 @@ public class GuiDrawKML extends GuiScreen {
 
         switch (button.id) { // Who did it?
             case SELECT_FILE_BUTTON_ID: // Selecting a file time
-                // Make open file dialog not look like as shit
-                try {
-                    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-                }catch(Exception ex) {
-                    ex.printStackTrace();
-                }
-                FileNameExtensionFilter filter = new FileNameExtensionFilter("kmz or kml file","kmz","kml"); // Files generally supported (but not enforced)
-
-                //Create a file chooser
-                final JFileChooser fc = new JFileChooser();
-                fc.setFileFilter(filter); // Set filter to kmz/kml
-
-                if (fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+                JFrame parent = new JFrame();
+                parent.setAlwaysOnTop(true); // can't hide the box,  messing up minecraft
+                if (FILE_CHOOSER.showOpenDialog(parent) == JFileChooser.APPROVE_OPTION) {
                     // Set file name textbox to file name from dialog
-                    fileNameTextBox.setText(fc.getSelectedFile().getAbsolutePath());
+                    updateFileNameText();
                 }
                 break;
-            case API_CHECK_BOX_ID: // Api setting
+            case API_CHECK_BOX_ID: // API setting
                 GoundLevelProcessor.defaultProcessor.enabled = apiCheckBox.isChecked(); // Can my boi process altitudes (using the internet)
                 break;
             case BUILD_BUTTON_ID: // Do ya thing!
@@ -287,15 +293,28 @@ public class GuiDrawKML extends GuiScreen {
             Placemark[] placemarks = PlacemarkFactory.getPlacemarks(documents);
 
             // Process Altitudes
-            PlacemarkFactory.proccessPlacemarks(placemarks);
+            PlacemarkFactory.processPlacemarks(placemarks);
 
-            close(); // Should have successfully processed the file, gui is not needed now
-            PlacemarkFactory.drawPlacemarks(placemarks, blockNameTextBox.getText()); // Draw!
+
+            // Should have successfully processed the file, gui is not needed now
+            // Open loading screen
+            Minecraft.getMinecraft().displayGuiScreen(new GuiBuilding(placemarks, blockNameTextBox.getText()));
         }).start();
     }
 
     // Bye bye!
     public void close() {
         mc.displayGuiScreen(parentScreen);
+    }
+
+    public void updateFileNameText() {
+        File file;
+        if (FILE_CHOOSER.getSelectedFile() != null) { // Get File
+            file = FILE_CHOOSER.getSelectedFile();
+        } else { // Get directory
+            file = FILE_CHOOSER.getCurrentDirectory();
+        }
+        fileNameTextBox.setText(file.getAbsolutePath());
+        lastFileName = fileNameTextBox.getText();
     }
 }

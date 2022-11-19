@@ -25,10 +25,21 @@ public class LineString extends Placemark {
     }
 
     @Override
-    public void draw(String blockName) {
+    public int getSubSections() {
+        return coordinates.length-1;
+    }
+
+    @Override
+    public void draw(String blockName, DrawPlacemarkSubsectionListener listener) {
         for (int i = 1; i < coordinates.length; i++) {
             MinecraftCommands.line(coordinates[i-1],coordinates[i], blockName); // Use the World Edit line command
+            if (listener != null) listener.subsectionDrawn(i, getSubSections());
         }
+    }
+
+    @Override
+    public void draw(String blockName) {
+
     }
 
     @Override

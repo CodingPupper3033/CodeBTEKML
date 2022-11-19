@@ -91,14 +91,28 @@ public class PlacemarkFactory {
     }
 
     /**
+     * Draws all placemarks from the array, and returns when one is drawn
+     * @param placemarks Placemarks to draw
+     * @param blockName block name to draw with
+     */
+    public static void drawPlacemarks(Placemark[] placemarks, String blockName, DrawListener listener) {
+        int i = 0;
+        for (Placemark placemark : placemarks) {
+            i++;
+            int finalI = i;
+            placemark.draw(blockName, (subsectionNumber, total) -> {
+                if (listener != null) listener.subsectionDrawn(subsectionNumber, total, finalI, placemarks.length);
+            });
+        }
+    }
+
+    /**
      * Draws all placemarks from the array
      * @param placemarks Placemarks to draw
      * @param blockName block name to draw with
      */
     public static void drawPlacemarks(Placemark[] placemarks, String blockName) {
-        for (Placemark placemark : placemarks) {
-            placemark.draw(blockName);
-        }
+        drawPlacemarks(placemarks,blockName,null);
     }
 
     /**
@@ -122,7 +136,7 @@ public class PlacemarkFactory {
         drawPlacemarks(KMLParser.parse(f), blockName);
     }
 
-    public static void proccessPlacemarks(Placemark[] placemarks) {
+    public static void processPlacemarks(Placemark[] placemarks) {
         for (Placemark placemark: placemarks) {
             GoundLevelProcessor.defaultProcessor.addCoordinatesToProcessQueue(placemark.getCoordinates());
         }

@@ -1,4 +1,4 @@
-package com.codingpupper3033.codebtekml.gui.buttons;
+package com.codingpupper3033.codebtekml.gui.widgets.buttons;
 
 import com.codingpupper3033.codebtekml.CodeBTEKMLMod;
 import net.minecraft.client.Minecraft;

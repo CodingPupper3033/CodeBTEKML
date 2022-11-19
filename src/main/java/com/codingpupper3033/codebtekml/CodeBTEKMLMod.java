@@ -8,6 +8,8 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.apache.logging.log4j.Logger;
 
+import javax.swing.*;
+
 /**
  * The mod itself
  * @author Joshua Miller
@@ -25,6 +27,14 @@ public class CodeBTEKMLMod
     public void preInit(FMLPreInitializationEvent event)
     {
         logger = event.getModLog();
+
+        // Make Look and Feel be better
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            System.out.println("obamna");
+        }catch(Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     @EventHandler

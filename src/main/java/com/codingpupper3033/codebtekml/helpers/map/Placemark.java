@@ -1,5 +1,7 @@
 package com.codingpupper3033.codebtekml.helpers.map;
 
+import com.codingpupper3033.codebtekml.helpers.map.placemark.DrawPlacemarkSubsectionListener;
+
 /**
  * Default placemark class.
  * Extend this class to make specific placemarks.
@@ -11,6 +13,19 @@ public abstract class Placemark {
      * @return all the Coordinates in this placemark
      */
     public abstract Coordinate[] getCoordinates();
+
+    /**
+     * Returns how many subsections this placemark has when drawing
+     * @return subsections
+     */
+
+    public abstract int getSubSections();
+
+    /**
+     * Should draw the placemark into the game and tell when subsection is made
+     * @param blockName block to draw placemark with
+     */
+    public abstract void draw(String blockName, DrawPlacemarkSubsectionListener listener);
 
     /**
      * Should draw the placemark into the game

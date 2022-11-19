@@ -23,8 +23,19 @@ public class Point extends Placemark {
     }
 
     @Override
-    public void draw(String blockName) {
+    public int getSubSections() {
+        return 1;
+    }
+
+    @Override
+    public void draw(String blockName, DrawPlacemarkSubsectionListener listener) {
         MinecraftCommands.set(coordinate, blockName); // Use World Edit set command as a point will just be a block
+        if (listener != null) listener.subsectionDrawn(1, getSubSections());
+    }
+
+    @Override
+    public void draw(String blockName) {
+        draw(blockName, null);
     }
 
     @Override
