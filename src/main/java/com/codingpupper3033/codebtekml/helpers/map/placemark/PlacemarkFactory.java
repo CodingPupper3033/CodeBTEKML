@@ -3,6 +3,7 @@ package com.codingpupper3033.codebtekml.helpers.map.placemark;
 import com.codingpupper3033.codebtekml.helpers.kmlfile.KMLParser;
 import com.codingpupper3033.codebtekml.helpers.map.Placemark;
 import com.codingpupper3033.codebtekml.helpers.map.altitude.GoundLevelProcessor;
+import com.codingpupper3033.codebtekml.mapdrawer.MinecraftCommands;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -96,6 +97,7 @@ public class PlacemarkFactory {
      * @param blockName block name to draw with
      */
     public static void drawPlacemarks(Placemark[] placemarks, String blockName, DrawListener listener) {
+        MinecraftCommands.currentSelMode = null;
         int i = 0;
         for (Placemark placemark : placemarks) {
             i++;

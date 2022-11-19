@@ -11,6 +11,7 @@ public class MinecraftCommands {
 
     public static final String POS_COMMAND = "//pos%s";
     public static final String SEL_COMMAND = "//sel %s";
+    public static SEL_MODES currentSelMode = null;
     public enum SEL_MODES {
         CUBOID("cuboid"),
         EXTEND("extend"),
@@ -91,7 +92,7 @@ public class MinecraftCommands {
     }
 
     public static void sel(SEL_MODES mode) {
-        sel(mode.getName());
+        if (mode != currentSelMode) sel(mode.getName());
     }
 
     public static void line(Coordinate start, Coordinate end, String blockName) {
