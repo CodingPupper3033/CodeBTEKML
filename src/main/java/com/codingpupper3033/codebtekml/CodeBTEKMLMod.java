@@ -19,7 +19,7 @@ public class CodeBTEKMLMod
 {
     public static final String MODID = "codebtekml";
     public static final String NAME = "BTE KML Importer";
-    public static final String VERSION = "2.0.0";
+    public static final String VERSION = "2.0.1";
 
     private static Logger logger;
 
