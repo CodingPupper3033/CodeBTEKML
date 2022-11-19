@@ -27,7 +27,9 @@ public class CommandSender {
         }
 
         private void output() {
-            Minecraft.getMinecraft().player.sendChatMessage(buffer.toString());
+            String command = buffer.toString();
+            command = command.replace("minecraft:",""); // World Edit doesn't know what minecraft: is ._.
+            Minecraft.getMinecraft().player.sendChatMessage(command);
 
             buffer = new StringBuffer();
         }
