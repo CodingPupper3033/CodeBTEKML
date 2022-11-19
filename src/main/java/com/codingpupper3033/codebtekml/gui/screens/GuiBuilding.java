@@ -16,7 +16,7 @@ public class GuiBuilding extends GuiScreen {
 
     public static final int[] DONE_POS = {0,90};
     public static final int DONE_COLOR = 0xFFFFFF;
-    public static final String DONE_TEXT = I18n.format("gui.done"+ "!");
+    public static final String DONE_TEXT = "gui.done";
     public static final int[] PROGRESS_BAR_POS = {-150,100};
     public static final int[] PROGRESS_BAR_SIZE = {300,20};
     private final String blockName;
@@ -88,7 +88,7 @@ public class GuiBuilding extends GuiScreen {
         if (doProgress) progressBar.drawProgress(progress);
 
         // Draw Done
-         drawCenteredString(Minecraft.getMinecraft().fontRenderer, DONE_TEXT, guiMiddleX+DONE_POS[0],guiStartY+DONE_POS[1], DONE_COLOR);
+        if (finished) drawCenteredString(Minecraft.getMinecraft().fontRenderer, I18n.format(DONE_TEXT)+"!", guiMiddleX+DONE_POS[0],guiStartY+DONE_POS[1], DONE_COLOR);
 
         super.drawScreen(mouseX, mouseY, partialTicks);
     }

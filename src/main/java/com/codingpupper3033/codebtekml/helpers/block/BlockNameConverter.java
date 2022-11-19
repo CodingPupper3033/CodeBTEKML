@@ -32,7 +32,7 @@ public class BlockNameConverter {
     }
 
     public static Map.Entry<String, Integer> getBlockNameAndMeta(ItemStack itemStack) {
-        String name = Block.getBlockFromItem(itemStack.getItem()).getLocalizedName();
+        String name = Block.getBlockFromItem(itemStack.getItem()).getRegistryName().toString();
         int meta = itemStack.getMetadata();
         return new AbstractMap.SimpleEntry<>(name, meta);
     }

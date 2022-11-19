@@ -12,6 +12,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.init.Blocks;
 import net.minecraftforge.fml.client.config.GuiCheckBox;
 import org.lwjgl.input.Keyboard;
 import org.w3c.dom.Document;
@@ -37,7 +39,6 @@ public class GuiDrawKML extends GuiScreen {
 
     // File Name Text Box
     public static final int FILE_NAME_TEXT_BOX_ID = 1;
-    //public static final String DEFAULT_FILE_NAME_TEXT_BOX_TEXT = javax.swing.filechooser.FileSystemView.getFileSystemView().getHomeDirectory().getAbsolutePath(); // Default path is Desktop cause why not
     public static final int MAX_FILE_PATH_CHARACTERS = 260; // windows limit according to the first bing result, TODO maybe change to programmatic, but like very insignificant as you just shouldn't need this many characters bro.
     private static final int[] FILE_NAME_TEXT_BOX_POS = {-155,0};
     public static final int[] FILE_NAME_TEXT_BOX_SIZE = {280,20};
@@ -46,13 +47,14 @@ public class GuiDrawKML extends GuiScreen {
 
     // Select File Button
     public static final int SELECT_FILE_BUTTON_ID = 2;
-    public static final String SELECT_FILE_HOVER_TEXT = "Select File";
+    public static final String SELECT_FILE_HOVER_TEXT = "tooltip.select_file";
+    public static final String SELECT_FILE_KMZ_KML_DESCRIPTION = "files.kml_kmz_file_description";
     private static final int[] SELECT_FILE_BUTTON_POS = {135, 0};
     private GuiButton selectFileButton;
 
     // File Error String
-    public static final String ERROR_FINDING_FILE_TEXT = "Unable to find file location. Please try again.";
-    public static final String ERROR_READING_FILE_TEXT = "Error reading file. Please try another.";
+    public static final String ERROR_FINDING_FILE_TEXT = "gui.error_finding_file";
+    public static final String ERROR_READING_FILE_TEXT = "gui.error_reading_file";
     public static final int ERROR_FILE_COLOR = 0xAA0000; // Same as Minecraft dark red, but TODO get dark red programmatically?
 
     private static final int[] ERROR_FILE_POS = {-145, 25};
@@ -67,26 +69,26 @@ public class GuiDrawKML extends GuiScreen {
     public static final int BLOCK_NAME_TEXT_BOX_ID = 3;
     public static final int[] BLOCK_NAME_TEXT_BOX_POS = {-95,40};
     public static final int[] BLOCK_NAME_TEXT_BOX_SIZE = {220,20};
-    public final String defaultBlockName = "gold_block";
-    public final String nullBlockName = "air";
+    public final String defaultBlockName = Blocks.GOLD_BLOCK.getRegistryName().toString();
+    public final String nullBlockName = Blocks.AIR.getRegistryName().toString();
     public boolean getBlockNameFromInventory = true; // When opening the GUI should it autopopulate with the held item?
     private GuiTextField blockNameTextBox;
 
     // Block Name Help Icon
     public static final int BLOCK_HELP_ID = 4;
-    public static final String BLOCK_HELP_HOVER_TEXT = "Block used to trace outline";
+    public static final String BLOCK_HELP_HOVER_TEXT = "tooltip.block_name_help";
     private static final int[] BLOCK_HELP_POS = {135, 40};
     private GuiButton blockHelpButton;
 
     // Allow API Checkbox
     public static final int API_CHECK_BOX_ID = 5;
     public static final int[] API_CHECK_BOX_POS = {-95,65};
-    public static final String API_CHECK_BOX_TEXT = "Get ground level from the internet";
+    public static final String API_CHECK_BOX_TEXT = "gui.get_from_api_text";
     private GuiCheckBox apiCheckBox;
 
     // Build Button
     public static final int BUILD_BUTTON_ID = 6;
-    public static final String BUILD_BUTTON_TEXT = "Build";
+    public static final String BUILD_BUTTON_TEXT = "gui.build";
     public static final int[] BUILD_BUTTON_POS = {-50,85};
     public static final int[] BUILD_BUTTON_SIZE = {100,20};
     private GuiButton buildButton;
@@ -106,7 +108,7 @@ public class GuiDrawKML extends GuiScreen {
         super.initGui();
 
         // Set up the filter for the file viewer
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("kmz or kml file","kmz","kml"); // Files generally supported (but not enforced)
+        FileNameExtensionFilter filter = new FileNameExtensionFilter(I18n.format(SELECT_FILE_KMZ_KML_DESCRIPTION),"kmz","kml"); // Files generally supported (but not enforced)
         FILE_CHOOSER.setFileFilter(filter); // Set filter to kmz/kml
         FILE_CHOOSER.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES); // Allow directories
 
@@ -154,12 +156,12 @@ public class GuiDrawKML extends GuiScreen {
         addButton(blockHelpButton);
 
         // API Check Box
-        apiCheckBox = new GuiCheckBox(API_CHECK_BOX_ID, guiMiddleX+API_CHECK_BOX_POS[0], guiStartY+API_CHECK_BOX_POS[1], API_CHECK_BOX_TEXT, true);
+        apiCheckBox = new GuiCheckBox(API_CHECK_BOX_ID, guiMiddleX+API_CHECK_BOX_POS[0], guiStartY+API_CHECK_BOX_POS[1], I18n.format(API_CHECK_BOX_TEXT), true);
         GoundLevelProcessor.defaultProcessor.enabled = true;
         addButton(apiCheckBox);
 
         // Build Button
-        buildButton = new GuiButton(BUILD_BUTTON_ID, guiMiddleX+BUILD_BUTTON_POS[0],guiStartY+BUILD_BUTTON_POS[1], BUILD_BUTTON_SIZE[0], BUILD_BUTTON_SIZE[1], BUILD_BUTTON_TEXT);
+        buildButton = new GuiButton(BUILD_BUTTON_ID, guiMiddleX+BUILD_BUTTON_POS[0],guiStartY+BUILD_BUTTON_POS[1], BUILD_BUTTON_SIZE[0], BUILD_BUTTON_SIZE[1], I18n.format(BUILD_BUTTON_TEXT));
         addButton(buildButton);
     }
 
@@ -188,12 +190,12 @@ public class GuiDrawKML extends GuiScreen {
 
         // Select File Tooltip
         if (mouseX >= guiMiddleX+ SELECT_FILE_BUTTON_POS[0] && mouseX < guiMiddleX+ SELECT_FILE_BUTTON_POS[0]+20 && mouseY >= guiStartY+ SELECT_FILE_BUTTON_POS[1] && mouseY < guiStartY+ SELECT_FILE_BUTTON_POS[1]+20) {
-            drawHoveringText(SELECT_FILE_HOVER_TEXT, mouseX, mouseY);
+            drawHoveringText(I18n.format(SELECT_FILE_HOVER_TEXT), mouseX, mouseY);
         }
 
         // Block Help Tooltip
         if (mouseX >= guiMiddleX+ BLOCK_HELP_POS[0] && mouseX < guiMiddleX+ BLOCK_HELP_POS[0]+20 && mouseY >= guiStartY+ BLOCK_HELP_POS[1] && mouseY < guiStartY+ BLOCK_HELP_POS[1]+20) {
-            drawHoveringText(BLOCK_HELP_HOVER_TEXT, mouseX, mouseY);
+            drawHoveringText(I18n.format(BLOCK_HELP_HOVER_TEXT), mouseX, mouseY);
         }
     }
 
@@ -274,19 +276,19 @@ public class GuiDrawKML extends GuiScreen {
      * Using the values from the text boxes, try parsing and building the file.
      */
     public void build() {
-        new Thread(() -> { // New thread as to allow for loading screen TODO Make loading screen
+        new Thread(() -> {
             Document[] documents;
 
             try {
                 documents = KMLParser.parse(new File(fileNameTextBox.getText())); // TODO Add loading/parsing text (maybe below build button) to the screen to signify it is doing stuff even if it looks frozen
             } catch (IOException e) {
-                errorFileText = ERROR_FINDING_FILE_TEXT;
+                errorFileText = I18n.format(ERROR_FINDING_FILE_TEXT);
                 return;
             } catch (ParserConfigurationException e) {
-                errorFileText = ERROR_READING_FILE_TEXT;
+                errorFileText = I18n.format(ERROR_READING_FILE_TEXT);
                 return;
             } catch (SAXException e) {
-                errorFileText = ERROR_READING_FILE_TEXT;
+                errorFileText = I18n.format(ERROR_READING_FILE_TEXT);
                 return;
             }
 

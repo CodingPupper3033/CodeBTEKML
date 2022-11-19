@@ -1,0 +1,7 @@
+tooltip.select_file=Select File
+gui.error_finding_file=Unable to find file location. Please try again.
+gui.error_reading_file=Error reading file. Please try another.
+tooltip.block_name_help=Block used to trace outline
+gui.get_from_api_text=Get ground level from the internet
+gui.build=Build
+files.kml_kmz_file_description=kmz or kml file

@@ -1,0 +1,7 @@
+tooltip.select_file=Find Map
+gui.error_finding_file=Map has been plundered. Choose one on the ship.
+gui.error_reading_file=Map is soiled. Choose another map.
+tooltip.block_name_help=Yer' block fer' drawin
+gui.get_from_api_text=Get ground frem other pirates
+gui.build=Construct
+files.kml_kmz_file_description=kmz or kml file
