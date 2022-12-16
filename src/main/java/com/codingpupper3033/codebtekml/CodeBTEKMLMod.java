@@ -9,6 +9,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
+import java.io.IOException;
 
 /**
  * The mod itself
@@ -24,14 +25,12 @@ public class CodeBTEKMLMod
     private static Logger logger;
 
     @EventHandler
-    public void preInit(FMLPreInitializationEvent event)
-    {
+    public void preInit(FMLPreInitializationEvent event) throws IOException {
         logger = event.getModLog();
 
         // Make Look and Feel be better
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            System.out.println("obamna");
         }catch(Exception ex) {
             ex.printStackTrace();
         }

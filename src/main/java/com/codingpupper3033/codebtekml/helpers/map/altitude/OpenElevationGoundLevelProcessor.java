@@ -33,7 +33,7 @@ public class OpenElevationGoundLevelProcessor extends GoundLevelProcessor {
      * @throws IOException
      */
     @Override
-    public double getGroundLevel(Coordinate coordinate) throws IOException {
+    public double getGroundLevel(Coordinate coordinate) throws IOException, NoAltitudeException {
         return getGroundLevels(new Coordinate[]{coordinate})[0];
     }
 
@@ -43,7 +43,9 @@ public class OpenElevationGoundLevelProcessor extends GoundLevelProcessor {
      * @throws IOException
      */
     @Override
-    public double[] getGroundLevels(Coordinate[] coordinates) throws IOException {
+    public double[] getGroundLevels(Coordinate[] coordinates) throws IOException, NoAltitudeException {
+        super.getGroundLevels(coordinates);
+
         StringBuffer coordsBuffer = new StringBuffer(); // Buffer of the coordinates to request from the API
 
         for (int i = 0; i < coordinates.length; i++) { // Add all coordinates
@@ -113,6 +115,8 @@ public class OpenElevationGoundLevelProcessor extends GoundLevelProcessor {
                 }
                 return true;
             } catch (IOException e) {
+                return false;
+            } catch (NoAltitudeException e) {
                 return false;
             }
         }
