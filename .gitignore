@@ -25,4 +25,4 @@ run
 forge*changelog.txt
 
 # Private Stuff
-/src/main/resources/assets/codebtekml/api_keys
+api_keys/
