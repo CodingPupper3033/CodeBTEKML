@@ -17,7 +17,7 @@ import java.net.URLConnection;
  * Uses the Open Elevation API to process altitudes.
  * @author Joshua Miller
  */
-public class OpenElevationGoundLevelProcessor extends GoundLevelProcessor {
+public class OpenElevationGroundLevelProcessor extends GroundLevelProcessor {
     public static final String URL = "https://api.open-elevation.com/api/v1/lookup?locations=%s"; // Path and format of the api url
     public static final String LOCATIONS_CONCAT = "|"; // How to combine multiple locations
 

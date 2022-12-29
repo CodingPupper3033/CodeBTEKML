@@ -13,13 +13,13 @@ import java.util.Queue;
  * @see AltitudeMode
  * @author Joshua Miller
  */
-public class GoundLevelProcessor {
+public class GroundLevelProcessor {
     /**
      * Default Altitude Processor
      * Currently it uses Open Elevation, as there appears to be no way to get ground level in java.
      * The downside is that it requires internet access to make API requests.
      */
-    public static GoundLevelProcessor defaultProcessor = new OpenElevationGoundLevelProcessor();
+    public static GroundLevelProcessor defaultProcessor = new GoogleMapsElevationGroundLevelProcessor();
 
     /**
      * Can we use this?

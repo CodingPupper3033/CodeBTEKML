@@ -6,7 +6,7 @@ import com.codingpupper3033.codebtekml.gui.widgets.buttons.IconButton;
 import com.codingpupper3033.codebtekml.helpers.block.BlockNameConverter;
 import com.codingpupper3033.codebtekml.helpers.kmlfile.KMLParser;
 import com.codingpupper3033.codebtekml.helpers.map.Placemark;
-import com.codingpupper3033.codebtekml.helpers.map.altitude.GoundLevelProcessor;
+import com.codingpupper3033.codebtekml.helpers.map.altitude.GroundLevelProcessor;
 import com.codingpupper3033.codebtekml.helpers.map.placemark.PlacemarkFactory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -157,7 +157,7 @@ public class GuiDrawKML extends GuiScreen {
 
         // API Check Box
         apiCheckBox = new GuiCheckBox(API_CHECK_BOX_ID, guiMiddleX+API_CHECK_BOX_POS[0], guiStartY+API_CHECK_BOX_POS[1], I18n.format(API_CHECK_BOX_TEXT), true);
-        GoundLevelProcessor.defaultProcessor.enabled = true;
+        GroundLevelProcessor.defaultProcessor.enabled = true;
         addButton(apiCheckBox);
 
         // Build Button
@@ -264,7 +264,7 @@ public class GuiDrawKML extends GuiScreen {
                 }
                 break;
             case API_CHECK_BOX_ID: // API setting
-                GoundLevelProcessor.defaultProcessor.enabled = apiCheckBox.isChecked(); // Can my boi process altitudes (using the internet)
+                GroundLevelProcessor.defaultProcessor.enabled = apiCheckBox.isChecked(); // Can my boi process altitudes (using the internet)
                 break;
             case BUILD_BUTTON_ID: // Do ya thing!
                 build();
