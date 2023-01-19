@@ -1,7 +1,7 @@
 package com.codingpupper3033.codebtekml.helpers.map.altitude;
 
 import com.codingpupper3033.codebtekml.CodeBTEKMLMod;
-import com.codingpupper3033.codebtekml.helpers.map.Coordinate;
+import com.codingpupper3033.codebtekml.helpers.map.coordinate.Coordinate;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -17,7 +17,7 @@ import java.net.URL;
 import java.net.URLConnection;
 
 /**
- * Uses the Open Elevation API to process altitudes.
+ * Uses Google Elevation API to process altitudes.
  * @author Joshua Miller
  */
 public class GoogleMapsElevationGroundLevelProcessor extends GroundLevelProcessor {
@@ -71,8 +71,6 @@ public class GoogleMapsElevationGroundLevelProcessor extends GroundLevelProcesso
 
         URL url = new URL(String.format(URL, coordsBuffer, getAPIKey()));
 
-        System.out.println(url);
-
         URLConnection connection = url.openConnection(); // Ask nicely
 
         // Get streams of response
@@ -88,8 +86,6 @@ public class GoogleMapsElevationGroundLevelProcessor extends GroundLevelProcesso
         }
 
         String jsonString = jsonBuffer.toString().trim();
-        System.out.println("foo");
-        System.out.println(jsonString);
 
         // Cleanup
         reader.close();
@@ -122,30 +118,6 @@ public class GoogleMapsElevationGroundLevelProcessor extends GroundLevelProcesso
     @Override
     public boolean processCoordinateGroundLevelQueue() {
         super.processCoordinateGroundLevelQueue();
-
-        while (!getCoordinateGroundLevelProcessorQueue().isEmpty()) { // Keep working until all out
-            Coordinate[] setOfLocationsToProcess = new Coordinate[Math.min(MAX_COORDINATES_PER_REQUEST, getCoordinateGroundLevelProcessorQueue().size())]; // Make it only as big as needed
-            int i = 0;
-            while (!getCoordinateGroundLevelProcessorQueue().isEmpty() && i < setOfLocationsToProcess.length) { // Only do the max size at a time
-                setOfLocationsToProcess[i] = getCoordinateGroundLevelProcessorQueue().poll();
-                i++;
-            }
-
-            // Process this set
-            try {
-                double[] groundLevels = getGroundLevels(setOfLocationsToProcess);
-
-                for (int j = 0; j < setOfLocationsToProcess.length; j++) { // Add the result to the coordinate
-                    setOfLocationsToProcess[j].setGroundLevel(groundLevels[j]);
-                }
-                return true;
-            } catch (IOException e) {
-                return false;
-            } catch (NoAltitudeException e) {
-                return false;
-            }
-        }
-
-        return false;
+        return processCoordinateGroundLevelQueueByPackets(MAX_COORDINATES_PER_REQUEST);
     }
 }
