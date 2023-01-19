@@ -4,8 +4,8 @@ import com.codingpupper3033.codebtekml.KeyInit;
 import com.codingpupper3033.codebtekml.gui.widgets.BlockPreview;
 import com.codingpupper3033.codebtekml.gui.widgets.buttons.IconButton;
 import com.codingpupper3033.codebtekml.helpers.block.BlockNameConverter;
-import com.codingpupper3033.codebtekml.helpers.kmlfile.KMLParser;
-import com.codingpupper3033.codebtekml.helpers.map.Placemark;
+import com.codingpupper3033.codebtekml.helpers.kml.KMLParser;
+import com.codingpupper3033.codebtekml.helpers.map.placemark.Placemark;
 import com.codingpupper3033.codebtekml.helpers.map.altitude.GroundLevelProcessor;
 import com.codingpupper3033.codebtekml.helpers.map.placemark.PlacemarkFactory;
 import net.minecraft.client.Minecraft;
@@ -296,7 +296,14 @@ public class GuiDrawKML extends GuiScreen {
 
             // Process Altitudes
             PlacemarkFactory.processPlacemarks(placemarks);
-
+            /*
+            StaticAltitudeCoordinateAltitudeHelper processor = new StaticAltitudeCoordinateAltitudeHelper(50);
+            try {
+                processor.convertCoordinatesAltitudeMode(PlacemarkFactory.getCoordinatesFromPlacemarks(placemarks), AltitudeMode.ABSOLUTE);
+            } catch (OperationNotSupportedException e) {
+                throw new RuntimeException(e);
+            }
+             */
 
             // Should have successfully processed the file, gui is not needed now
             // Open loading screen

@@ -1,6 +1,6 @@
 package com.codingpupper3033.codebtekml.mapdrawer;
 
-import com.codingpupper3033.codebtekml.helpers.map.Coordinate;
+import com.codingpupper3033.codebtekml.helpers.map.coordinate.Coordinate;
 
 /**
  * Commands able to be sent to the Minecraft Game

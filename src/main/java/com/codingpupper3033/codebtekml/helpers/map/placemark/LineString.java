@@ -1,8 +1,7 @@
 package com.codingpupper3033.codebtekml.helpers.map.placemark;
 
-import com.codingpupper3033.codebtekml.helpers.kmlfile.KMLParser;
-import com.codingpupper3033.codebtekml.helpers.map.Coordinate;
-import com.codingpupper3033.codebtekml.helpers.map.Placemark;
+import com.codingpupper3033.codebtekml.helpers.kml.KMLParser;
+import com.codingpupper3033.codebtekml.helpers.map.coordinate.Coordinate;
 import com.codingpupper3033.codebtekml.mapdrawer.MinecraftCommands;
 import org.w3c.dom.Element;
 
