@@ -1,6 +1,6 @@
-package com.codingpupper3033.codebtekml.helpers.kmlfile;
+package com.codingpupper3033.codebtekml.helpers.kml;
 
-import com.codingpupper3033.codebtekml.helpers.map.Coordinate;
+import com.codingpupper3033.codebtekml.helpers.map.coordinate.Coordinate;
 import com.codingpupper3033.codebtekml.helpers.map.altitude.AltitudeMode;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -16,9 +16,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
 /***
  * Responsible for extracting data from a KML or KMZ file
@@ -115,31 +112,8 @@ public class KMLParser {
      * @throws SAXException                 the sax exception
      */
     static public Document[] parseKMZ(File f) throws ParserConfigurationException, IOException, SAXException {
-        ZipFile zipFile = new ZipFile(f); // The KMZ file should be a form of a zip file
-
-        ArrayList<Document> out = new ArrayList<>(); // ArrayList to add documents to
-
-        Enumeration<? extends ZipEntry> entries = zipFile.entries();
-        while (entries.hasMoreElements()) {
-            ZipEntry entry = entries.nextElement();
-            if (entry.isDirectory()) continue; // Will not recursively look
-
-            boolean isKML = false;
-
-            for (int i = 0; i < KML_FILE_NAMES.length; i++) { // Does it end with one of the KML file extensions?
-                if (entry.getName().endsWith("." + KML_FILE_NAMES[i])) {
-                    isKML = true;
-                    break;
-                }
-            }
-            if (!isKML) continue; // This file does not end with any KML file extensions
-
-            InputStream inputStream = zipFile.getInputStream(entry); // It does end with a kml file extension
-            out.add(parseKML(inputStream)); // Add this kml file document
-        }
-
-        Document[] outArray = new Document[out.size()]; // convert it to array as we now know the size
-        return out.toArray(outArray);
+        KMZFile kmzFile = new KMZFile(f);
+        return new Document[] {parseKML(kmzFile.getMainKMLZInputStream())};
     }
 
     /**
@@ -208,6 +182,7 @@ public class KMLParser {
      */
     static public Element[] getPlacemarkElements(Document document) {
         NodeList placemarkElementNodeList = document.getElementsByTagName(PLACEMARK_NODE_NAME); // Get all Placemark Elements
+
 
         Element[] out = new Element[placemarkElementNodeList.getLength()]; // To array
 

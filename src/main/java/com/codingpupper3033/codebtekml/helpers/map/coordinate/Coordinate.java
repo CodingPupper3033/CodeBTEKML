@@ -1,4 +1,4 @@
-package com.codingpupper3033.codebtekml.helpers.map;
+package com.codingpupper3033.codebtekml.helpers.map.coordinate;
 
 import com.codingpupper3033.codebtekml.helpers.map.altitude.AltitudeMode;
 import com.codingpupper3033.codebtekml.helpers.map.altitude.GroundLevelProcessor;
@@ -13,11 +13,11 @@ import java.io.IOException;
 public class Coordinate {
     private final double lon;
     private final double lat;
-    private final double elv;
+    private double elv;
 
     private Double groundLevel;
     
-    private final AltitudeMode altitudeMode;
+    private AltitudeMode altitudeMode;
 
     /**
      * Instantiates a new Coordinate.
@@ -47,8 +47,14 @@ public class Coordinate {
         return elv;
     }
 
+    public void setElevation(int elevation) { elv = elevation; }
+
     public AltitudeMode getAltitudeMode() {
         return altitudeMode;
+    }
+
+    public void setAltitudeMode(AltitudeMode altitudeMode) {
+        this.altitudeMode = altitudeMode;
     }
 
     public void setGroundLevel(Double groundLevel) {
@@ -80,7 +86,7 @@ public class Coordinate {
                 if (groundLevel == null) {
                     groundLevel = GroundLevelProcessor.defaultProcessor.getGroundLevel(this);
                 }
-                return groundLevel + getElevation() + 0.5; // +.5 to offset player
+                return groundLevel + getElevation();
             default:
                 throw (new NoAltitudeException());
         }

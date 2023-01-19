@@ -1,5 +1,6 @@
-package com.codingpupper3033.codebtekml.helpers.map;
+package com.codingpupper3033.codebtekml.helpers.map.placemark;
 
+import com.codingpupper3033.codebtekml.helpers.map.coordinate.Coordinate;
 import com.codingpupper3033.codebtekml.helpers.map.placemark.DrawPlacemarkSubsectionListener;
 
 /**

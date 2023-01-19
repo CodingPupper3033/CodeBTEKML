@@ -1,6 +1,7 @@
-package com.codingpupper3033.codebtekml.helpers.map.altitude;
+package com.codingpupper3033.codebtekml.processors.Elevation;
 
-import com.codingpupper3033.codebtekml.helpers.map.Coordinate;
+import com.codingpupper3033.codebtekml.helpers.map.altitude.NoAltitudeException;
+import com.codingpupper3033.codebtekml.helpers.map.coordinate.Coordinate;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -17,7 +18,7 @@ import java.net.URLConnection;
  * Uses the Open Elevation API to process altitudes.
  * @author Joshua Miller
  */
-public class OpenElevationGroundLevelProcessor extends GroundLevelProcessor {
+public class OpenElevationLevelProcessor extends ElevationLevelProcessor {
     public static final String URL = "https://api.open-elevation.com/api/v1/lookup?locations=%s"; // Path and format of the api url
     public static final String LOCATIONS_CONCAT = "|"; // How to combine multiple locations
 
@@ -27,14 +28,29 @@ public class OpenElevationGroundLevelProcessor extends GroundLevelProcessor {
     // Max amount of locations to ask for per request
     public static final int MAX_COORDINATES_PER_REQUEST = 16;
 
+    @Override
+    public boolean setup(Coordinate[] coordinates) {
+        return false;
+    }
+
+    /**
+     * Finishes dealing with the coordinates as they may not be needed again.
+     *
+     * @param coordinates Coordinates to finish up with
+     * @return
+     */
+    @Override
+    public boolean finish(Coordinate[] coordinates) {
+        return false;
+    }
+
     /**
      * @param coordinate Coordinate to get the altitude of
      * @return elevation of the ground at the coordinate
-     * @throws IOException
      */
     @Override
-    public double getGroundLevel(Coordinate coordinate) throws IOException, NoAltitudeException {
-        return getGroundLevels(new Coordinate[]{coordinate})[0];
+    public double get(Coordinate coordinate) throws NoAltitudeException, IOException {
+        return getAll(new Coordinate[]{coordinate})[0];
     }
 
     /**
@@ -43,9 +59,7 @@ public class OpenElevationGroundLevelProcessor extends GroundLevelProcessor {
      * @throws IOException
      */
     @Override
-    public double[] getGroundLevels(Coordinate[] coordinates) throws IOException, NoAltitudeException {
-        super.getGroundLevels(coordinates);
-
+    public double[] getAll(Coordinate[] coordinates) throws IOException, NoAltitudeException {
         StringBuffer coordsBuffer = new StringBuffer(); // Buffer of the coordinates to request from the API
 
         for (int i = 0; i < coordinates.length; i++) { // Add all coordinates
@@ -94,33 +108,8 @@ public class OpenElevationGroundLevelProcessor extends GroundLevelProcessor {
      * Processes the ground level for all Coordinates in the queue
      * @return whether it was able to process the queue
      */
-    @Override
-    public boolean processCoordinateGroundLevelQueue() {
-        super.processCoordinateGroundLevelQueue();
-
-        while (!getCoordinateGroundLevelProcessorQueue().isEmpty()) { // Keep working until all out
-            Coordinate[] setOfLocationsToProcess = new Coordinate[Math.min(MAX_COORDINATES_PER_REQUEST, getCoordinateGroundLevelProcessorQueue().size())]; // Make it only as big as needed
-            int i = 0;
-            while (!getCoordinateGroundLevelProcessorQueue().isEmpty() && i < setOfLocationsToProcess.length) { // Only do the max size at a time
-                setOfLocationsToProcess[i] = getCoordinateGroundLevelProcessorQueue().poll();
-                i++;
-            }
-
-            // Process this set
-            try {
-                double[] groundLevels = getGroundLevels(setOfLocationsToProcess);
-
-                for (int j = 0; j < setOfLocationsToProcess.length; j++) { // Add the result to the coordinate
-                    setOfLocationsToProcess[j].setGroundLevel(groundLevels[j]);
-                }
-                return true;
-            } catch (IOException e) {
-                return false;
-            } catch (NoAltitudeException e) {
-                return false;
-            }
-        }
-
-        return false;
-    }
+//        @Override
+//        public boolean processCoordinateGroundLevelQueue() {
+//            return processCoordinateGroundLevelQueueByPackets(MAX_COORDINATES_PER_REQUEST);
+//        }
 }
