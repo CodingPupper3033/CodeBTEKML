@@ -1,6 +1,6 @@
 package com.codingpupper3033.codebtekml.helpers.map.altitude;
 
-import com.codingpupper3033.codebtekml.helpers.map.Coordinate;
+import com.codingpupper3033.codebtekml.helpers.map.coordinate.Coordinate;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -15,7 +15,7 @@ import java.util.Queue;
  */
 public class GroundLevelProcessor {
     /**
-     * Default Altitude Processor
+     * Default Ground Level Processor
      * Currently it uses Open Elevation, as there appears to be no way to get ground level in java.
      * The downside is that it requires internet access to make API requests.
      */
@@ -29,7 +29,11 @@ public class GroundLevelProcessor {
     /**
      * List of coordinates to process
      */
-    private Queue<Coordinate> coordinateGroundLevelProcessorQueue = new LinkedList<>();
+    private final Queue<Coordinate> coordinateGroundLevelProcessorQueue = new LinkedList<>();
+    /**
+     * List of coordinates processed ground level already
+     */
+    private final Queue<Coordinate> coordinateGroundLevelFinishedQueue = new LinkedList<>();
 
     /**
      * Default altitude method. Should not be used.
@@ -63,6 +67,14 @@ public class GroundLevelProcessor {
         coordinateGroundLevelProcessorQueue.addAll(Arrays.asList(coordinates));
     }
 
+    public void addCoordinateToFinishQueue(Coordinate coordinates) {
+        coordinateGroundLevelFinishedQueue.add(coordinates);
+    }
+
+    public void addCoordinatesToFinishQueue(Coordinate[] coordinates) {
+        coordinateGroundLevelFinishedQueue.addAll(Arrays.asList(coordinates));
+    }
+
     public Queue<Coordinate> getCoordinateGroundLevelProcessorQueue() {
         return coordinateGroundLevelProcessorQueue;
     }
@@ -73,6 +85,41 @@ public class GroundLevelProcessor {
      * @return Whether it succeeded
      */
     public boolean processCoordinateGroundLevelQueue() {
+        return false;
+    }
+
+    /**
+     * Processes the Coordinate Queue by splitting requests into "packets"
+     * @param max_coordinates_per_request how many coordinates to request at a time
+     * @return
+     */
+    public boolean processCoordinateGroundLevelQueueByPackets(int max_coordinates_per_request) {
+        while (!getCoordinateGroundLevelProcessorQueue().isEmpty()) { // Keep working until all out
+            Coordinate[] setOfLocationsToProcess = new Coordinate[Math.min(max_coordinates_per_request, getCoordinateGroundLevelProcessorQueue().size())]; // Make it only as big as needed
+            int i = 0;
+            while (!getCoordinateGroundLevelProcessorQueue().isEmpty() && i < setOfLocationsToProcess.length) { // Only do the max size at a time
+                setOfLocationsToProcess[i] = getCoordinateGroundLevelProcessorQueue().poll();
+                i++;
+            }
+
+            // Process this set
+            try {
+                double[] groundLevels = getGroundLevels(setOfLocationsToProcess);
+
+                for (int j = 0; j < setOfLocationsToProcess.length; j++) { // Add the result to the coordinate
+                    setOfLocationsToProcess[j].setGroundLevel(groundLevels[j]);
+                }
+
+                addCoordinatesToFinishQueue(setOfLocationsToProcess);
+
+                return true;
+            } catch (IOException e) {
+                return false;
+            } catch (NoAltitudeException e) {
+                return false;
+            }
+        }
+
         return false;
     }
 }
