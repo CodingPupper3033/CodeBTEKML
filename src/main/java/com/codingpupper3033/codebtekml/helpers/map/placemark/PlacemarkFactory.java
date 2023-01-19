@@ -1,8 +1,8 @@
 package com.codingpupper3033.codebtekml.helpers.map.placemark;
 
-import com.codingpupper3033.codebtekml.helpers.kmlfile.KMLParser;
-import com.codingpupper3033.codebtekml.helpers.map.Placemark;
+import com.codingpupper3033.codebtekml.helpers.kml.KMLParser;
 import com.codingpupper3033.codebtekml.helpers.map.altitude.GroundLevelProcessor;
+import com.codingpupper3033.codebtekml.helpers.map.coordinate.Coordinate;
 import com.codingpupper3033.codebtekml.mapdrawer.MinecraftCommands;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -14,6 +14,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Creates Placemarks Based upon type
@@ -70,9 +71,7 @@ public class PlacemarkFactory {
         ArrayList<Placemark> out = new ArrayList<>();
 
         for (Document document : documents) { // Loop through all documents
-            for (Placemark placemark : getPlacemarks(document)) { // add all placemarks (this way as getPlacemarks returns an array not list)
-                out.add(placemark);
-            }
+            Collections.addAll(out, getPlacemarks(document));
         }
 
         Placemark[] placemarks = new Placemark[out.size()]; // yeet to array
@@ -138,10 +137,23 @@ public class PlacemarkFactory {
         drawPlacemarks(KMLParser.parse(f), blockName);
     }
 
-    public static void processPlacemarks(Placemark[] placemarks) {
+    public static Coordinate[] getCoordinatesFromPlacemarks(Placemark[] placemarks) {
+        ArrayList<Coordinate> coordinates = new ArrayList<>();
+
         for (Placemark placemark: placemarks) {
-            GroundLevelProcessor.defaultProcessor.addCoordinatesToProcessQueue(placemark.getCoordinates());
+            Collections.addAll(coordinates, placemark.getCoordinates());
         }
+
+        Coordinate[] out = new Coordinate[coordinates.size()];
+        for (int i = 0; i < coordinates.size(); i++) {
+            out[i] = coordinates.get(i);
+        }
+
+        return out;
+    }
+
+    public static void processPlacemarks(Placemark[] placemarks) {
+        GroundLevelProcessor.defaultProcessor.addCoordinatesToProcessQueue(getCoordinatesFromPlacemarks(placemarks));
         GroundLevelProcessor.defaultProcessor.processCoordinateGroundLevelQueue();
     }
 }
