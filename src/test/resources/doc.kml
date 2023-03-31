@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Document>
+	<name>Center.kmz</name>
+	<StyleMap id="inline39">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline214</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline35</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline192">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline35">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="inline84">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#inline0</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#inline192</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="inline0">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Style id="inline214">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Folder>
+		<name>Center</name>
+		<open>1</open>
+		<Placemark>
+			<name>Path Measure</name>
+			<styleUrl>#inline84</styleUrl>
+			<LineString>
+				<tessellate>1</tessellate>
+				<altitudeMode>relativeToGround</altitudeMode>
+				<coordinates>
+					-73.60092885802101,40.63201176556532,-1.672841070650319e-09 -73.60092033938835,40.63199332899335,-3.253390174139019e-08 -73.6009101353048,40.63197319470152,-3.855063654409677e-08 -73.60089969511354,40.63195437827942,-3.12742440458857e-08 -73.60087924269116,40.63191431817373,-2.635110386242227e-10 -73.60086659831656,40.63189054146022,-6.030399858431565e-08 -73.60085445225222,40.63186954539727,-3.268349122562667e-08 -73.60083447898413,40.63183674938484,-6.125421384207908e-09 -73.60083051997363,40.63183008012373,-5.667015366294048e-08 
+				</coordinates>
+			</LineString>
+		</Placemark>
+		<Placemark>
+			<name>Path Measure</name>
+			<styleUrl>#inline39</styleUrl>
+			<LineString>
+				<tessellate>1</tessellate>
+				<altitudeMode>relativeToGround</altitudeMode>
+				<coordinates>
+					-73.59612133268786,40.62246235022138,-2.094646528148222e-08 -73.59613800938067,40.62243419614774,-3.368293623071146e-08 -73.59615596596352,40.62240759371635,-5.442072062173677e-08 -73.5961756608548,40.62238348980761,-6.289958931690082e-10 -73.59619368732098,40.62236486564044,4.451470827338252e-08 -73.5962038807824,40.62235513479446,1.426287864635352e-09 -73.59621948041121,40.62234065146107,4.49430884374573e-08 -73.59624219554107,40.62232273097707,2.672442283736755e-09 -73.59624681038764,40.6223198197944,2.625768767880826e-08 
+				</coordinates>
+			</LineString>
+		</Placemark>
+	</Folder>
+</Document>
+</kml>

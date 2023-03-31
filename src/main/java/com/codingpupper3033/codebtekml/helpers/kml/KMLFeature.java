@@ -6,7 +6,7 @@ import org.w3c.dom.NodeList;
 /**
  * @author Joshua Miller
  */
-public class KMLElement {
+public class KMLFeature {
     private final Element element;
 
     private enum NODE_NAMES {
@@ -19,17 +19,17 @@ public class KMLElement {
         }
     }
 
-    public KMLElement(Element element) {
+    public KMLFeature(Element element) {
         this.element = element;
     }
 
-    public KMLElement[] getPlacemarks() {
+    public KMLFeature[] getPlacemarks() {
         NodeList placemarkElementNodeList = element.getElementsByTagName(NODE_NAMES.PLACEMARK.name); // Get all Placemark Elements
 
-        KMLElement[] out = new KMLElement[placemarkElementNodeList.getLength()]; // To array
+        KMLFeature[] out = new KMLFeature[placemarkElementNodeList.getLength()]; // To array
 
         for (int i = 0; i < out.length; i++) {
-            out[i] = new KMLElement((Element) placemarkElementNodeList.item(i)); // Converts it to an element
+            out[i] = new KMLFeature((Element) placemarkElementNodeList.item(i)); // Converts it to an element
         }
 
         return out;

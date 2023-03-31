@@ -1,4 +1,4 @@
-package com.codingpupper3033.codebtekml.kml;
+package com.codingpupper3033.codebtekml.kmlobjects;
 
 import org.junit.Test;
 
