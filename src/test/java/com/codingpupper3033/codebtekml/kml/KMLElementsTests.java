@@ -36,9 +36,18 @@ public class KMLElementsTests {
     }
 
     @Test
-    public void canReadKMLContainerNewDocument() throws ParserConfigurationException, IOException, SAXException {
-        KMLDocument document = KMLDocument.fromKMLFile(new File("src/test/resources/doc.kml"));
+    public void newDocumentFromKML() throws ParserConfigurationException, IOException, SAXException {
+        KMLDocument document = KMLDocument.fromFile(new File("src/test/resources/doc.kml"));
 
         assertEquals("Able to get correct name", "Center.kmz", document.getName());
     }
+
+    @Test
+    public void newDocumentFromKMZ() throws ParserConfigurationException, IOException, SAXException {
+        KMLDocument document = KMLDocument.fromFile(new File("src/test/resources/Center.kmz"));
+
+        assertEquals("Able to get correct name", "Center.kmz", document.getName());
+    }
+
+
 }

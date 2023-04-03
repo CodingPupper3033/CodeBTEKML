@@ -1,4 +1,4 @@
-package com.codingpupper3033.codebtekml.helpers.kml;
+package com.codingpupper3033.codebtekml.kml;
 
 import java.io.IOException;
 

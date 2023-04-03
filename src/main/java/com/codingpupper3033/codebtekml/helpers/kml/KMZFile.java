@@ -1,5 +1,7 @@
 package com.codingpupper3033.codebtekml.helpers.kml;
 
+import com.codingpupper3033.codebtekml.kml.MalformedKMZException;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -150,30 +152,29 @@ public class KMZFile extends ZipFile {
     }
 
     public ZipEntry getMainKMLZipEntry() throws MalformedKMZException {
-        Enumeration<? extends ZipEntry> entries = entries();
-
+        // Loop though files to find main file
+        Enumeration<? extends ZipEntry> entries = entries(); // Get top level entries in Zip File
         ZipEntry foundEntry = null;
-        while (entries.hasMoreElements()) { // Look through all files in root directory
+        while (entries.hasMoreElements()) {
             ZipEntry currentEntry = entries.nextElement();
             if (currentEntry.isDirectory()) continue; // Will not recursively look
 
-
             for (int i = 0; i < KML_FILE_EXTENSIONS.length; i++) { // Does it end with one of the KML file extensions?
-                if (currentEntry.getName().endsWith("." + KML_FILE_EXTENSIONS[i])) {
-                    if (foundEntry != null) { // Did we already find one?
-                        throw new MalformedKMZException("Multiple main KML files found. Unable to choose."); // Can't have multiple mate
-                    } else { // One is fine tho
-                        foundEntry = currentEntry;
-                    }
-                }
+                // Not this extension
+                if (!currentEntry.getName().endsWith("." + KML_FILE_EXTENSIONS[i])) continue;
+
+                // Already found one
+                if (foundEntry != null) throw new MalformedKMZException("Multiple main KML files found. Unable to choose."); // Can't have multiple main
+
+
+                foundEntry = currentEntry;
             }
         }
 
-        if (foundEntry != null) { // We found one bois
-            return foundEntry;
-        } else { // Couldn't Find a KML in it
-            throw new MalformedKMZException("No main KML file");
-        }
+        // Didn't find a main file
+        if (foundEntry == null) throw new MalformedKMZException("No main KML file");
+
+        return foundEntry;
     }
 
     public InputStream getMainKMLZInputStream() throws IOException {
