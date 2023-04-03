@@ -5,4 +5,9 @@ package com.codingpupper3033.codebtekml.kml;
  * @author Joshua Miller
  */
 public class KMLElement {
+    // Tag names
+    // Containers
+    public static final String TAG_DOCUMENT = "Document";
+    public static final String TAG_FOLDER = "Folder";
+
 }

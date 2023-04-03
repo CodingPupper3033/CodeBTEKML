@@ -16,6 +16,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 /**
+ * Representation of the Entire KML Document
  * @author Joshua Miller
  */
 public class KMLDocument extends KMLContainer {
@@ -23,9 +24,6 @@ public class KMLDocument extends KMLContainer {
      * List of recognized KML file extensions
      */
     public static final String[] KML_EXTENSIONS = {"kml"};
-
-    // Tag names
-    public static final String TAG_DOCUMENT = "document";
 
     /**
      * Constructor from a DOM Element representing the document node should be 'kml'
@@ -43,7 +41,7 @@ public class KMLDocument extends KMLContainer {
      * @param document
      */
     public KMLDocument(Document document) {
-        super(document.getDocumentElement());
+        this(document.getDocumentElement());
     }
 
     /**
@@ -62,6 +60,14 @@ public class KMLDocument extends KMLContainer {
         return fromKMZFile(file);
     }
 
+    /**
+     * Constructor that reads the main KML file of a KMZ file.
+     * @param file KMZ file to process
+     * @return KMLDocument representing the KML file in the KMZ file
+     * @throws IOException
+     * @throws ParserConfigurationException
+     * @throws SAXException
+     */
     public static KMLDocument fromKMZFile(File file) throws IOException, ParserConfigurationException, SAXException {
         // Open Zip File
         ZipFile zipKMZFile = new ZipFile(file);
@@ -109,6 +115,14 @@ public class KMLDocument extends KMLContainer {
         return new KMLDocument(document);
     }
 
+    /**
+     * Creates a KML Document from an input stream of a KMZ file.
+     * @param stream Stream to import from
+     * @return KMLDocument from that file
+     * @throws ParserConfigurationException
+     * @throws IOException
+     * @throws SAXException
+     */
     public static KMLDocument fromKMLInputStream(InputStream stream) throws ParserConfigurationException, IOException, SAXException {
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = documentBuilderFactory.newDocumentBuilder();
