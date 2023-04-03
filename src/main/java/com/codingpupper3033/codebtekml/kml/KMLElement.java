@@ -9,5 +9,7 @@ public class KMLElement {
     // Containers
     public static final String TAG_DOCUMENT = "Document";
     public static final String TAG_FOLDER = "Folder";
+    // Placemarks
+    public static final String TAG_PLACEMARK = "Placemark";
 
 }

@@ -46,6 +46,8 @@ public class KMLElementsTests {
     public void newDocumentFromKMZ() throws ParserConfigurationException, IOException, SAXException {
         KMLDocument document = KMLDocument.fromFile(new File("src/test/resources/Center.kmz"));
 
+        System.out.println(document.getContainers().get(0).getPlacemarks().get(0).getName());
+
         assertEquals("Able to get correct name", "Center.kmz", document.getName());
     }
 

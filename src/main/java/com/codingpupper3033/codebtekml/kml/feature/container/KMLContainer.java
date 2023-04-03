@@ -1,6 +1,8 @@
 package com.codingpupper3033.codebtekml.kml.feature.container;
 
 import com.codingpupper3033.codebtekml.kml.feature.KMLFeature;
+import com.codingpupper3033.codebtekml.kml.feature.KMLPlacemark;
+import javafx.util.Pair;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -13,6 +15,7 @@ import java.util.ArrayList;
  */
 public class KMLContainer extends KMLFeature {
     private final ArrayList<KMLContainer> containers;
+    private final ArrayList<KMLPlacemark> placemarks;
 
     /**
      * Constructor from a DOM Element
@@ -22,7 +25,9 @@ public class KMLContainer extends KMLFeature {
     public KMLContainer(Element element) {
         super(element); // Get name and visibility
 
-        containers = getContainers(element);
+        Pair<ArrayList<KMLContainer>, ArrayList<KMLPlacemark>> features = getFeatures(element);
+        containers = features.getKey();
+        placemarks = features.getValue();
     }
 
     /**
@@ -31,8 +36,29 @@ public class KMLContainer extends KMLFeature {
      * @return ArrayList of all found containers
      */
     public static ArrayList<KMLContainer> getContainers(Element element) {
-        // Go through all children
+        return getFeatures(element).getKey();
+    }
+
+    /**
+     * Gets the list of Placemarks in this container
+     * @param element Container holding placemarks
+     * @return ArrayList of all found containers
+     */
+    public static ArrayList<KMLPlacemark> getPlacemarks(Element element) {
+        return getFeatures(element).getValue();
+    }
+
+
+    /**
+     * Gets the Containers and Placemarks separately, then return the lists
+     * @param element Container elements
+     * @return Pair of Containers and Placemarks
+     */
+    public static Pair<ArrayList<KMLContainer>, ArrayList<KMLPlacemark>> getFeatures(Element element) {
         ArrayList<KMLContainer> containers = new ArrayList<>();
+        ArrayList<KMLPlacemark> placemarks = new ArrayList<>();
+
+        // Go through all children
         NodeList childNodes = element.getChildNodes();
         for (int i = 0; i < childNodes.getLength(); i++) {
             Node currentNode = childNodes.item(i);
@@ -42,21 +68,29 @@ public class KMLContainer extends KMLFeature {
 
             Element currentElement = (Element) currentNode;
 
-            KMLContainer foundContainer = null;
-            // Create specified container
+
             // There should only ever be one document, and the root node is a document. TLDR: Never need to make a docuement
-            // Folders
-            if (currentElement.getTagName().equals(TAG_FOLDER)) {
-                foundContainer = new KMLFolder(currentElement);
+            switch (currentElement.getTagName()) {
+                // Containers
+                case TAG_FOLDER: // Folders
+                    containers.add(new KMLFolder(currentElement));
+                    break;
+                // Placemarks
+                case TAG_PLACEMARK:
+                    placemarks.add(new KMLPlacemark(currentElement));
+                    break;
             }
 
-            if (foundContainer != null) containers.add(foundContainer);
         }
 
-        return containers;
+        return new Pair<>(containers, placemarks);
     }
 
     public ArrayList<KMLContainer> getContainers() {
         return containers;
+    }
+
+    public ArrayList<KMLPlacemark> getPlacemarks() {
+        return placemarks;
     }
 }
