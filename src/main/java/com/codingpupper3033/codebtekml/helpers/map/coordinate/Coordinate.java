@@ -1,8 +1,8 @@
 package com.codingpupper3033.codebtekml.helpers.map.coordinate;
 
-import com.codingpupper3033.codebtekml.helpers.map.altitude.AltitudeMode;
 import com.codingpupper3033.codebtekml.helpers.map.altitude.GroundLevelProcessor;
 import com.codingpupper3033.codebtekml.helpers.map.altitude.NoAltitudeException;
+import com.codingpupper3033.codebtekml.kml.attributes.AltitudeMode;
 
 import java.io.IOException;
 

@@ -1,6 +1,7 @@
 package com.codingpupper3033.codebtekml.helpers.map.altitude;
 
 import com.codingpupper3033.codebtekml.helpers.map.coordinate.Coordinate;
+import com.codingpupper3033.codebtekml.kml.attributes.AltitudeMode;
 
 import java.io.IOException;
 import java.util.Arrays;

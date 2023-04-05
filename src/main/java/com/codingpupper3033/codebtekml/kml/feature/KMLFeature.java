@@ -8,10 +8,6 @@ import org.w3c.dom.Element;
  * @author Joshua Miller
  */
 public class KMLFeature extends KMLElement {
-    // Attributes name in KML files
-    private static final String ELEMENT_NAME = "name";
-    private static final String ELEMENT_VISIBLE = "visibility";
-
     private String name;
     private boolean visible;
 
@@ -21,10 +17,10 @@ public class KMLFeature extends KMLElement {
      * @param element DOM Element representing the feature
      */
     protected KMLFeature(Element element) {
-        Element nameElement = (Element) element.getElementsByTagName(ELEMENT_NAME).item(0); // Should only ever have one
+        Element nameElement = (Element) element.getElementsByTagName(TAG_NAME).item(0); // Should only ever have one
         name = (nameElement == null) ? "": nameElement.getTextContent();
 
-        Element visibleElement = (Element) element.getElementsByTagName(ELEMENT_VISIBLE).item(0); // Should only ever have one
+        Element visibleElement = (Element) element.getElementsByTagName(TAG_VISIBILITY).item(0); // Should only ever have one
         visible = visibleElement == null || visibleElement.getNodeValue().equals("1"); // Only 1 is a valid option for true in booleans. If no tag, assume true
     }
 

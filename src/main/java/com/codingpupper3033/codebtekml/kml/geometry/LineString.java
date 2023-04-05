@@ -7,16 +7,18 @@ import org.w3c.dom.Element;
 /**
  * @author Joshua Miller
  */
-public class Point extends KMLGeometry {
+public class LineString extends KMLGeometry {
     private final Coordinates coordinates;
     private final AltitudeMode altitudeMode;
 
-    public Point(Element element) {
+    public LineString(Element element) {
         super(element);
 
         this.coordinates = getCoordinatesFromElement(element);
         this.altitudeMode = getAltitudeModeFromElement(element);
     }
 
-
+    public Coordinates getCoordinates() {
+        return coordinates;
+    }
 }

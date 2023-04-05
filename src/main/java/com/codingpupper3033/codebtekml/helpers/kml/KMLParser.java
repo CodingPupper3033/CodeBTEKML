@@ -1,7 +1,7 @@
 package com.codingpupper3033.codebtekml.helpers.kml;
 
 import com.codingpupper3033.codebtekml.helpers.map.coordinate.Coordinate;
-import com.codingpupper3033.codebtekml.helpers.map.altitude.AltitudeMode;
+import com.codingpupper3033.codebtekml.kml.attributes.AltitudeMode;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;

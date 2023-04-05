@@ -1,6 +1,6 @@
 package com.codingpupper3033.codebtekml.helpers.map.coordinate;
 
-import com.codingpupper3033.codebtekml.helpers.map.altitude.AltitudeMode;
+import com.codingpupper3033.codebtekml.kml.attributes.AltitudeMode;
 
 import javax.naming.OperationNotSupportedException;
 

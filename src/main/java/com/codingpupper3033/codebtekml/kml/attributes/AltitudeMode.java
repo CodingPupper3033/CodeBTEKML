@@ -1,4 +1,4 @@
-package com.codingpupper3033.codebtekml.helpers.map.altitude;
+package com.codingpupper3033.codebtekml.kml.attributes;
 
 /**
  * Modes to read the altitude from a kml file
